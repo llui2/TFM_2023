@@ -9,7 +9,7 @@ C     FORTRAN 2003
       USE MODEL
 
 C-----(SYSTEM)------------------------------------------------
-c     NODES, EDGES, CONNECTIVITY
+C     NODES, EDGES, CONNECTIVITY
       INTEGER N, M, z
 C     NUMBER OF REPLICAS 
       INTEGER R
@@ -61,6 +61,7 @@ C-----------------------------------------------------------------------
 
       PRINT*, 'OBSERVABLES'
 
+C***********************************************************************
 C     READ SIMULATION VARIABLES FROM INPUT FILE
       CALL READ_INPUT(N,z,R,TEMP_LIST,H_LIST,p_LIST,C,NSEEDS,SC
      .               ,zip_size)
@@ -71,18 +72,18 @@ C     ALLOCATION
       ALLOCATE(decimal(1:N/zip_size))
       bin = REPEAT(' ',N)
       ALLOCATE(S(1:R,1:N))
-!***********************************************************************
+C***********************************************************************
 C     INITIAL SEED NUMBER
       SEEDini = 100
       CALL CPU_TIME(TIME1)
-!***********************************************************************
-
+C***********************************************************************
       CALL SYSTEM('mkdir -p results/observables/')
       OPEN(UNIT=1,FILE='results/observables/MZ.dat')
 300   FORMAT(A,4X,A,7X,A,7X,A)
-      WRITE(1,300) 'TEMP', 'H', 'p', '<|MZ|>'
+      WRITE(1,300) '#TEMP', 'H', 'p', '<|MZ|>'
       OPEN(UNIT=2,FILE='results/observables/MX.dat')
-      WRITE(2,300) 'TEMP', 'H', 'p', '<MX>'
+      WRITE(2,300) '#TEMP', 'H', 'p', '<MX>'
+C***********************************************************************
 
 C     FOR ALL TEMP VALUES
       DO ITEMP = 1,SIZE(TEMP_LIST)
@@ -102,37 +103,40 @@ C     FOR ALL p VALUES
       WRITE(str,'(f4.2)') p
       str3 = str(1:1)//str(3:4)
 
+C***********************************************************************
+C     RESET OBSERVABLES
       MZ = 0.D0
       MX = 0.D0
+C***********************************************************************
 
 C     FOR ALL SEEDS
       DO SEED = SEEDini,SEEDini+NSEEDS-1
       WRITE(str4,'(i3)') SEED
       CALL setr1279(SEED)
-      
+
+C***********************************************************************
 C     RECALL RANDOM SYSTEM (GRAPH+COUPLINGS)
       CALL IRS(N,M,p,NBR,INBR,JJ)
-
+C***********************************************************************
 C     READ SPIN CONFIGURATIONS FROM FILE
       OPEN(UNIT=3,FILE='results/sample/T'//str1//'_Γ'//str2//
-     *'/S_'//str3//'_'//str4//'.bin',FORM='UNFORMATTED')
-
+     *'/S_'//str3//'_'//str4//'.dat',FORM='FORMATTED')
+C***********************************************************************
       DO IC = 1,2*C
-
-      DO i=1,R
-            READ(3) decimal
-            CALL DEC2BIN(N,zip_size,bin,decimal)
-            CALL BIN2ARRAY(N,bin,S(i,:))
-      END DO
-
-C     OBSERVABLES
-      MZ = MZ + ABS(MAGNET_Z(N,R,S))
-      MX = MX + MAGNET_X(N,R,S,TEMP,H)
-
+            DO i=1,R
+                  ! READ(3) decimal
+                  ! CALL DEC2BIN(N,zip_size,bin,decimal)
+                  ! CALL BIN2ARRAY(N,bin,S(i,:))
+                  READ(3,*) bin
+                  CALL BIN2ARRAY(N,bin,S(i,:))
+            END DO
+C           OBSERVABLES
+            MZ = MZ + ABS(MAGNET_Z(N,R,S))
+            MX = MX + MAGNET_X(N,R,S,TEMP,H)
       END DO !IC
-
+C***********************************************************************
       CLOSE(3)
-
+C***********************************************************************
 C     DELLOCATE ARRAYS
       DO i = 1,N
             DEALLOCATE(NBR(i)%v)
@@ -142,19 +146,24 @@ C     DELLOCATE ARRAYS
       DEALLOCATE(NBR)
       DEALLOCATE(INBR)
       DEALLOCATE(JJ)
-!***********************************************************************
+C***********************************************************************
 
       END DO !SEED
 
+C***********************************************************************
+C     SAVE OBSERVABLES     
 200   FORMAT(F4.2,4X,F4.2,4X,F4.2,4X,F13.10)
       WRITE(1,200) TEMP, H, p, MZ/(2*C*NSEEDS)
       WRITE(2,200) TEMP, H, p, MX/(2*C*NSEEDS)
+C***********************************************************************
 
       END DO !Ip
       END DO !IH
       END DO !ITEMP
 
+C***********************************************************************
       CLOSE(1)
       CLOSE(2)
+C***********************************************************************
 
       END PROGRAM OBSERVABLES

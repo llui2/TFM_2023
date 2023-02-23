@@ -9,7 +9,7 @@ C     FORTRAN 2003
       USE MODEL
 
 C-----(SYSTEM)------------------------------------------------
-c     NODES, EDGES, CONNECTIVITY
+C     NODES, EDGES, CONNECTIVITY
       INTEGER N, M, z
 C     NUMBER OF REPLICAS 
       INTEGER R
@@ -64,7 +64,7 @@ C-----------------------------------------------------------------------
 
       PRINT*, 'METROPOLIS SAMPLE GENERATION'
 
-!***********************************************************************
+C***********************************************************************
 C     READ SIMULATION VARIABLES FROM INPUT FILE
       CALL READ_INPUT(N,z,R,TEMP_LIST,H_LIST,p_LIST,C,NSEEDS,SC
      .               ,zip_size)
@@ -78,11 +78,11 @@ C     ALLOCATION
       bin2 = REPEAT(' ',N)
       ALLOCATE(S1(1:R,1:N))
       ALLOCATE(S2(1:R,1:N))
-!***********************************************************************
+C***********************************************************************
 C     INITIAL SEED NUMBER
       SEEDini = 100
       CALL CPU_TIME(TIME1)
-!***********************************************************************
+C***********************************************************************
 
 C     FOR ALL TEMP VALUES
       DO ITEMP = 1,SIZE(TEMP_LIST)
@@ -96,12 +96,12 @@ C     FOR ALL Γ VALUES
       WRITE(str,'(f4.2)') H
       str2 = str(1:1)//str(3:4)
 
-!***********************************************************************
+C***********************************************************************
 C     CREATE DIRECTORY FOR EACH TEMP AND Γ VALUE IN THE 'sample' FOLDER
       CALL SYSTEM('mkdir -p results/sample/T'//str1//'_Γ'//str2)
 C     COPY INPUT FILE TO THE RESULTS FOLDER
       CALL SYSTEM('cp input.txt results/input.txt')
-!***********************************************************************
+C***********************************************************************
 
 C     FOR ALL p VALUES
       DO Ip = 1,SIZE(p_LIST)
@@ -114,17 +114,14 @@ C     FOR ALL SEEDS
       WRITE(str4,'(i3)') SEED
       CALL setr1279(SEED)
       
+C***********************************************************************
 C     INITIAL RANDOM SYSTEM (GRAPH+COUPLINGS)
       CALL IRS(N,M,p,NBR,INBR,JJ)
-
-      PRINT*, '>>> T'//str1//'_Γ'//str2//
-     .'/S_'//str3//'_'//str4
-!***********************************************************************
+C***********************************************************************
 C     SPIN CONFIGURATION FILE FOR EACH p VALUE AND SEED
       OPEN(UNIT=1,FILE='results/sample/T'//str1//'_Γ'//str2//
-     *'/S_'//str3//'_'//str4//'.bin',FORM='UNFORMATTED')
-!***********************************************************************
-
+     *'/S_'//str3//'_'//str4//'.dat',FORM='FORMATTED')
+C***********************************************************************
 C     GENERATION OF TWO RANDOM INITIAL SPIN CONFIGURATIONS
       DO i = 1,R
             DO j = 1,N
@@ -132,16 +129,13 @@ C     GENERATION OF TWO RANDOM INITIAL SPIN CONFIGURATIONS
                   S2(i,j) = INT(2*MOD(INT(2*r1279()),2) - 1)
             END DO
       END DO
-
-!***********************************************************************
+C***********************************************************************
 C     INITIAL ENERGY
       ENE1 = ENERG(N,R,S1,TEMP,H,NBR,JJ)
       ENE2 = ENERG(N,R,S2,TEMP,H,NBR,JJ)
-!***********************************************************************
-
-c     MONTE-CARLO SIMULATION
+C***********************************************************************
+C     MONTE-CARLO SIMULATION
       DO IMC = 1,MCTOT
-
             DO IPAS = 1,N*R
                   CALL METROPOLIS(S1,N,R,valid1,TEMP,H,DE1,NBR,JJ)
                   CALL METROPOLIS(S2,N,R,valid2,TEMP,H,DE2,NBR,JJ)
@@ -154,19 +148,27 @@ c     MONTE-CARLO SIMULATION
             END DO
 C           EXTRACT THE SPIN CONFIGURATION EVERY SC MONTE-CARLO STEPS
             IF ((IMC.GT.MCINI).AND.(SC*(IMC/SC).EQ.IMC)) THEN
+                  ! DO i = 1,R
+                  !       CALL ARRAY2BIN(N,bin1,S1(i,:))
+                  !       CALL BIN2DEC(N,zip_size,bin1,decimal1)
+                  !       WRITE(1) decimal1
+                  ! END DO
+                  ! DO i = 1,R
+                  !       CALL ARRAY2BIN(N,bin2,S2(i,:))
+                  !       CALL BIN2DEC(N,zip_size,bin2,decimal2)
+                  !       WRITE(1) decimal2
+                  ! END DO
                   DO i = 1,R
                         CALL ARRAY2BIN(N,bin1,S1(i,:))
-                        CALL BIN2DEC(N,zip_size,bin1,decimal1)
-                        WRITE(1) decimal1
+                        WRITE(1,*) bin1
                   END DO
                   DO i = 1,R
                         CALL ARRAY2BIN(N,bin2,S2(i,:))
-                        CALL BIN2DEC(N,zip_size,bin2,decimal2)
-                        WRITE(1) decimal2
+                        WRITE(1,*) bin2
                   END DO
             END IF
       END DO !IMC
-!***********************************************************************
+C***********************************************************************
       CLOSE(1)
 C     DELLOCATE ARRAYS
       DO i = 1,N
@@ -177,7 +179,7 @@ C     DELLOCATE ARRAYS
       DEALLOCATE(NBR)
       DEALLOCATE(INBR)
       DEALLOCATE(JJ)
-!***********************************************************************
+C***********************************************************************
 200   FORMAT (A,I4,A,I3,A,I3,A,I3,A,I3,A,I3)
       IF ((SEED.EQ.SEEDini).AND.(p.EQ.p_LIST(1)).AND. 
      .(TEMP.EQ.TEMP_LIST(1)).AND.(H.EQ.H_LIST(1))) THEN
@@ -188,17 +190,19 @@ C     DELLOCATE ARRAYS
      . INT((time/3600-INT(time/3600))*60), ' min', 
      . INT((time/60-INT(time/60))*60), ' s'
       END IF
-!***********************************************************************
+C***********************************************************************
 
       END DO !SEED
       END DO !Ip
       END DO !IH
       END DO !ITEMP
 
+C***********************************************************************
       CALL CPU_TIME(TIME2)
       time = (TIME2-TIME1)
       WRITE(*,200) "CPU TIME: ", INT(time/3600), ' h',
      . INT((time/3600-int(time/3600))*60), ' min', 
      . INT((time/60-int(time/60))*60), ' s'
+C***********************************************************************
 
       END PROGRAM SAMPLE_GENERATOR

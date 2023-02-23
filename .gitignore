@@ -1,2 +1,6 @@
 .DS_Store
 results
+cmd.txt
+A
+plots/*.pdf
+code/*.mod

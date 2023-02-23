@@ -20,7 +20,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     READ INPUT FILE
       SUBROUTINE READ_INPUT(N,z,R,TEMP_LIST,H_LIST,p_LIST,C,NSEEDS,SC
-     .       ,zip_size)
+     . ,zip_size)
 
       INTEGER N,z
       INTEGER R
@@ -113,8 +113,8 @@ C     FRACTION OF EDGES WITH VALUE 1
 C     GENERATE M/2 EDGES OF WEIGHT 1
       k = 0
       DO WHILE(k<edges_p)
-            i = INT(r1279()*N) + 1
-            j = INT(r1279()*N) + 1
+            i = MOD(INT(r1279()*N),N) + 1
+            j = MOD(INT(r1279()*N),N) + 1
 
             IF ((i.gt.N).or.(j.gt.N)) THEN
                   PRINT*, 'ERROR'
@@ -133,8 +133,8 @@ C     GENERATE M/2 EDGES OF WEIGHT 1
 C     GENERATE M/2 EDGES OF WEIGHT -1 
       k = 0
       DO WHILE(k<edges_n)
-            i = INT(r1279()*N) + 1 
-            j = INT(r1279()*N) + 1 
+            i = MOD(INT(r1279()*N),N) + 1 
+            j = MOD(INT(r1279()*N),N) + 1 
 
             IF ((i.gt.N).or.(j.gt.N)) THEN
                   PRINT*, 'ERROR'
@@ -180,16 +180,16 @@ C     THIS FUNCTION CALCULATES THE ENERGY OF THE SYSTEM GIVEN A CONFIGURATION
 
       REAL*8 K2
       REAL*8 HD, V
-      INTEGER PBC(1:R) !PERIODIC BOUNDARY CONDITIONS IN THE R DIRECTION
+      INTEGER ABOVE(1:R) !SPIN ABOVE i
 
       INTEGER i, j, k
       
       DO i=1,R-1
-            PBC(i) = i+1
+            ABOVE(i) = i+1
       END DO
-      PBC(R) = 1
+      ABOVE(R) = 1
 
-      K2 = -(TEMP/2.)*LOG(1./TANH(H/(TEMP*R)))
+      K2 = (TEMP/2.)*LOG(TANH(H/(TEMP*R)))
 
       HD = 0.0d0 !DIAGONAL TERM
       V = 0.0d0 !TRANSVERSE FIELD TERM
@@ -197,13 +197,13 @@ C     THIS FUNCTION CALCULATES THE ENERGY OF THE SYSTEM GIVEN A CONFIGURATION
       DO i = 1,R
             DO j = 1,N
                   DO k = 1,SIZE(NBR(j)%v)
-                        HD = HD - S(i,j)*S(i,NBR(j)%v(k))*JJ(j)%v(k)
+                        HD = HD + JJ(j)%v(k)*S(i,j)*S(i,NBR(j)%v(k))
                   END DO
-                  V = V - S(i,j)*S(PBC(i),j)
+                  V = V + S(i,j)*S(ABOVE(i),j)
             END DO
       END DO
 
-      ENERG =  HD/(2*R) + K2*V
+      ENERG =  -HD/(2*R) + K2*V
       
       RETURN
       END FUNCTION ENERG
@@ -282,17 +282,19 @@ C     CHANGE IS ACCEPTED WITH A PROBABILITY OF EXP(-ΔH_eff/k_BT).
       REAL*8 DHD, DV, DE
       REAL*8 K2
 
+      INTEGER PBC(0:R+1)
+
+      PBC(0)=R
+      DO i=1,R
+            PBC(i) = i
+      END DO
+      PBC(R+1) = 1
+
       valid = .FALSE.
 
 C     RANDOM NODE SELECTION
-      i = INT(r1279()*R) + 1
-      j = INT(r1279()*N) + 1
-
-      IF ((i.gt.R).or.(j.gt.N)) THEN
-            PRINT*, 'ERROR'
-            STOP
-      END IF
-
+      i = MOD(INT(r1279()*R),R) + 1
+      j = MOD(INT(r1279()*N),N) + 1
       
 C     CALCULATION OF ΔHD
       DHD = 0
@@ -302,8 +304,8 @@ C     CALCULATION OF ΔHD
       DHD = 2*DHD*S(i,j)/R
 
 C     CALCULATION OF ΔV
-      K2 = -(TEMP/2.)*LOG(1./TANH(H/(TEMP*R)))
-      DV = 2*H*S(i,j)*K2
+      K2 = (TEMP/2.)*LOG(TANH(H/(TEMP*R)))
+      DV = -K2*S(i,j)*S(PBC(i+1),j)-K2*S(i,j)*S(PBC(i-1),j)
 
 C     CALCULATION OF ΔH
       DE = DHD + DV
