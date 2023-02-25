@@ -15,6 +15,7 @@
 
 # Now comes the commands to be executed
 # Copy files to the local disk on the node
+cp input.txt $TMPDIR/
 cp metropolis.out $TMPDIR/
 cp observables.out $TMPDIR/
 
