@@ -11,5 +11,5 @@ gfortran observables.o model.o r1279.o ran2.o -o observables.out
 rm *.o
 ./observables.out
 rm *.out
-python3 plots/MZ.py
-#open plots/fig1.pdf
+python3 code/mz.py
+#open results/fig1.png

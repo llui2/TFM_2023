@@ -2,5 +2,6 @@
 results
 cmd.txt
 A
+git.txt
 plots/*.pdf
 code/*.mod

@@ -29,4 +29,4 @@ ax.set_ylim(0, 1)
 plt.margins(0, 0)
 
 # Show plot
-plt.savefig('plots/fig1.pdf')
+plt.savefig('results/fig1.pdf')
