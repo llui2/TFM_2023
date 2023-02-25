@@ -74,8 +74,12 @@ C     READ SIMULATION VARIABLES FROM INPUT FILE
 C     ALLOCATION
       ALLOCATE(decimal1(1:N/zip_size))
       ALLOCATE(decimal2(1:N/zip_size))
-      bin1 = REPEAT(' ',N)
-      bin2 = REPEAT(' ',N)
+      bin1=' '
+      bin2=' '
+      DO i = 1,N
+            bin1 = bin1//' '
+            bin2 = bin2//' '
+      END DO
       ALLOCATE(S1(1:R,1:N))
       ALLOCATE(S2(1:R,1:N))
 C***********************************************************************
