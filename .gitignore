@@ -5,3 +5,5 @@ A
 git.txt
 plots/*.pdf
 code/*.mod
+README.md
+clean.sh
