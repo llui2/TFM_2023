@@ -2,7 +2,7 @@ C     SPIN MODEL MODULE
 C     0!
 C     Lluís Torres 
 C     TFG
-C     FORTRAN 2003
+C     FORTRAN 77
 
       MODULE MODEL 
 
