@@ -6,3 +6,4 @@ chmod +x observables.o model.o r1279.o ran2.o
 gfortran observables.o model.o r1279.o ran2.o -o observables.out
 rm *.o
 rm *.mod
+qsub job.sh
