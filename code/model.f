@@ -327,14 +327,14 @@ C     THIS SUBRUTINE CONVERTS AN ARRAY OF -1 AND 1 TO A BINARY NUMBER
 
       INTEGER i, N
       INTEGER array(1:N)
-      CHARACTER(:), ALLOCATABLE :: binary
+      INTEGER, ALLOCATABLE :: binary(:)
 
       DO i = 1,N
-            binary(i:i) = '0'
+            binary(i) = 0
       END DO
       DO i = 1,N
             IF (array(i) == 1) THEN
-                  binary(i:i) = '1'
+                  binary(i) = 1
             END IF
       END DO
 
@@ -348,14 +348,14 @@ C     BINARY TO DECIMALS
 C     THIS SUBRUTINE CONVERTS A BINARY NUMBER TO N/zip_size DECIMAL NUMBERS
 
       INTEGER i, j, N, zip_size, scale
-      CHARACTER(:), ALLOCATABLE :: binary
+      INTEGER, ALLOCATABLE :: binary(:)
       INTEGER decimal(1:N/zip_size)
 
       DO j = 1,N/zip_size
             decimal(j) = 0
             scale = (j-1)*zip_size
             DO i = 1,zip_size
-                  IF (binary(scale+i:scale+i).EQ.'1') THEN
+                  IF (binary(i).EQ.1) THEN
                         decimal(j) = decimal(j) + 2**(zip_size-i)
                   END IF
             END DO
@@ -371,7 +371,7 @@ C     DECIMALS TO BINARY
 C     THIS SUBRUTINE CONVERTS N/zip_size DECIMAL NUMBERS TO A BINARY NUMBER
 
       INTEGER i, j, N, zip_size, scale
-      CHARACTER(:), ALLOCATABLE :: binary
+      INTEGER, ALLOCATABLE :: binary(:)
       INTEGER decimal(1:N/zip_size)
       INTEGER decimal_copy(1:N/zip_size)
 
@@ -380,9 +380,9 @@ C     THIS SUBRUTINE CONVERTS N/zip_size DECIMAL NUMBERS TO A BINARY NUMBER
       scale = (j-1)*zip_size
       DO i = zip_size,1,-1
             IF (MOD(decimal_copy(j),2)==1) THEN
-                  binary(scale+i:scale+i) = '1'
+                  binary(scale+i) = 1
             ELSE
-                  binary(scale+i:scale+i) = '0'
+                  binary(scale+i) = 0
             END IF
             decimal_copy(j) = decimal_copy(j)/2
       END DO
@@ -398,11 +398,11 @@ C     BINARY TO ARRAY
 C     THIS SUBRUTINE CONVERTS A BINARY NUMBER TO AN ARRAY OF -1 AND 1
 
       INTEGER i, N
-      INTEGER,INTENT(OUT) :: array(1:N)
-      CHARACTER(:), ALLOCATABLE :: binary
+      INTEGER array(1:N)
+      INTEGER, ALLOCATABLE :: binary(:)
 
       DO i = 1,N
-            IF (binary(i:i).EQ.'1') THEN
+            IF (binary(i).EQ.1) THEN
                   array(i) = 1
             ELSE
                   array(i) = -1

@@ -50,7 +50,7 @@ C     SIMULATION VARIABLES
 C-----(SPIN CONFIGURATION SAVING VARIABLES)-------------------
 C     STORE SPIN CONFIGURATION AS N/zip_size INTEGERS
       INTEGER zip_size
-      CHARACTER(:), ALLOCATABLE:: bin1, bin2
+      INTEGER, ALLOCATABLE:: bin1(:), bin2(:)
       INTEGER, ALLOCATABLE:: decimal1(:), decimal2(:)
       INTEGER, ALLOCATABLE:: array1(:), array2(:)
 C-----(DUMMY)-------------------------------------------------
@@ -77,14 +77,8 @@ C     ALLOCATION
       ALLOCATE(decimal2(1:N/zip_size))
       ALLOCATE(array1(1:N))
       ALLOCATE(array2(1:N))
-      ! bin1 = REPEAT(' ',N)
-      ! bin2 = REPEAT(' ',N)
-      bin1=' '
-      bin2=' '
-      DO i = 1,N
-            bin1 = bin1//' '
-            bin2 = bin2//' '
-      END DO
+      ALLOCATE(bin1(1:N))
+      ALLOCATE(bin2(1:N))
       ALLOCATE(S1(1:R,1:N))
       ALLOCATE(S2(1:R,1:N))
 C***********************************************************************

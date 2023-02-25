@@ -43,7 +43,7 @@ C     SIMULATION VARIABLES
 C-----(SPIN CONFIGURATION SAVING VARIABLES)-------------------
 C     STORE SPIN CONFIGURATION AS N/zip_size INTEGERS
       INTEGER zip_size
-      CHARACTER(:), ALLOCATABLE:: bin
+      INTEGER, ALLOCATABLE:: bin(:)
       INTEGER, ALLOCATABLE:: decimal(:)
       INTEGER, ALLOCATABLE:: array(:)
 C-----(OBSERVABLES)-------------------------------------------
@@ -72,11 +72,7 @@ C     READ SIMULATION VARIABLES FROM INPUT FILE
 C     ALLOCATION
       ALLOCATE(decimal(1:N/zip_size))
       ALLOCATE(array(1:N))
-      ! bin = REPEAT(' ',N)
-      bin = ' '
-      DO i=1,N
-            bin = bin//' '
-      END DO
+      ALLOCATE(bin(1:N))
       ALLOCATE(S(1:R,1:N))
 C***********************************************************************
 C     INITIAL SEED NUMBER
