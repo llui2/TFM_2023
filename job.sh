@@ -17,14 +17,14 @@
 # Copy files to the local disk on the node
 cp input.txt $TMPDIR/
 cp execute.sh $TMPDIR/
-cp code $TMPDIR/
-cp r1279 $TMPDIR/
+cp -r code $TMPDIR/
+cp -r r1279 $TMPDIR/
 
 # Change to the execution directory
 cd $TMPDIR/
 # And run the exe
 ./execute.sh
 # Finally, we copy back all important output to the working directory
-scp results nodo00:$SGE_O_WORKDIR
+scp -r results nodo00:$SGE_O_WORKDIR
 
 
