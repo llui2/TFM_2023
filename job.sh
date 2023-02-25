@@ -1,6 +1,6 @@
 #!/bin/bash
 # Job name:
-#$ -N Metropolis
+#$ -N metropolis
 # Output log file:
 #$ -o $JOB_NAME-$JOB_ID.log
 # Combining output/error messages into one file
@@ -15,15 +15,14 @@
 
 # Now comes the commands to be executed
 # Copy files to the local disk on the node
-cp input.txt $TMPDIR/
-cp execute.sh $TMPDIR/
-cp -r code $TMPDIR/
-cp -r r1279 $TMPDIR/
+cp metropolis.out $TMPDIR/
+cp observables.out $TMPDIR/
 
 # Change to the execution directory
 cd $TMPDIR/
 # And run the exe
-./execute.sh
+./metropolis.out
+./observables.out
 # Finally, we copy back all important output to the working directory
 scp -r results nodo00:$SGE_O_WORKDIR
 
