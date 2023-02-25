@@ -42,7 +42,7 @@ C     SEED NUMBER, INITIAL SEED NUMBER
 C     RANDOM NUMBER GENERATOR
       EXTERNAL r1279
 C     ESTIMATE TIME VARIABLES
-      REAL*4 TIME1, TIME2, time
+!      REAL*4 TIME1, TIME2, time
 C     SIMULATION VARIABLES
       INTEGER, ALLOCATABLE:: S1(:,:), S2(:,:)
       LOGICAL valid1, valid2
@@ -85,7 +85,7 @@ C     ALLOCATION
 C***********************************************************************
 C     INITIAL SEED NUMBER
       SEEDini = 100
-      CALL CPU_TIME(TIME1)
+!      CALL CPU_TIME(TIME1)
 C***********************************************************************
 
 C     FOR ALL TEMP VALUES
@@ -186,15 +186,15 @@ C     DELLOCATE ARRAYS
       DEALLOCATE(INBR)
       DEALLOCATE(JJ)
 C***********************************************************************
-200   FORMAT (A,I4,A,I3,A,I3,A,I3,A,I3,A,I3)
-      IF ((SEED.EQ.SEEDini).AND.(p.EQ.p_LIST(1)).AND. 
-     .(TEMP.EQ.TEMP_LIST(1)).AND.(H.EQ.H_LIST(1))) THEN
-      CALL CPU_TIME(TIME2)
-      time = (TIME2-TIME1)*NSEEDS*H_SIZE*p_SIZE*TEMP_SIZE
-      WRITE(*,200) "ESTIMATED TIME: ", INT(time/3600), ' h',
-     . INT((time/3600-INT(time/3600))*60), ' min', 
-     . INT((time/60-INT(time/60))*60), ' s'
-      END IF
+! 200   FORMAT (A,I4,A,I3,A,I3,A,I3,A,I3,A,I3)
+!       IF ((SEED.EQ.SEEDini).AND.(p.EQ.p_LIST(1)).AND. 
+!      .(TEMP.EQ.TEMP_LIST(1)).AND.(H.EQ.H_LIST(1))) THEN
+!       CALL CPU_TIME(TIME2)
+!       time = (TIME2-TIME1)*NSEEDS*H_SIZE*p_SIZE*TEMP_SIZE
+!       WRITE(*,200) "ESTIMATED TIME: ", INT(time/3600), ' h',
+!      . INT((time/3600-INT(time/3600))*60), ' min', 
+!      . INT((time/60-INT(time/60))*60), ' s'
+!      END IF
 C***********************************************************************
 
       END DO !SEED
@@ -203,11 +203,11 @@ C***********************************************************************
       END DO !ITEMP
 
 C***********************************************************************
-      CALL CPU_TIME(TIME2)
-      time = (TIME2-TIME1)
-      WRITE(*,200) "CPU TIME: ", INT(time/3600), ' h',
-     . INT((time/3600-int(time/3600))*60), ' min', 
-     . INT((time/60-int(time/60))*60), ' s'
+!       CALL CPU_TIME(TIME2)
+!       time = (TIME2-TIME1)
+!       WRITE(*,200) "CPU TIME: ", INT(time/3600), ' h',
+!      . INT((time/3600-INT(time/3600))*60), ' min', 
+!      . INT((time/60-INT(time/60))*60), ' s'
 C***********************************************************************
 
       END PROGRAM SAMPLE_GENERATOR
