@@ -70,7 +70,10 @@ C     READ SIMULATION VARIABLES FROM INPUT FILE
       MCINI = MCTOT/3
 C     ALLOCATION
       ALLOCATE(decimal(1:N/zip_size))
-      bin = REPEAT(' ',N)
+      bin = ' '
+      DO i=1,N
+            bin = bin//' '
+      END DO
       ALLOCATE(S(1:R,1:N))
 C***********************************************************************
 C     INITIAL SEED NUMBER
@@ -120,15 +123,15 @@ C     RECALL RANDOM SYSTEM (GRAPH+COUPLINGS)
 C***********************************************************************
 C     READ SPIN CONFIGURATIONS FROM FILE
       OPEN(UNIT=3,FILE='results/sample/T'//str1//'_Γ'//str2//
-     *'/S_'//str3//'_'//str4//'.dat',FORM='FORMATTED')
+     *'/S_'//str3//'_'//str4//'.bin',FORM='UNFORMATTED')
 C***********************************************************************
       DO IC = 1,2*C
             DO i=1,R
-                  ! READ(3) decimal
-                  ! CALL DEC2BIN(N,zip_size,bin,decimal)
-                  ! CALL BIN2ARRAY(N,bin,S(i,:))
-                  READ(3,*) bin
+                  READ(3) decimal
+                  CALL DEC2BIN(N,zip_size,bin,decimal)
                   CALL BIN2ARRAY(N,bin,S(i,:))
+                  ! READ(3,*) bin
+                  ! CALL BIN2ARRAY(N,bin,S(i,:))
             END DO
 C           OBSERVABLES
             MZ = MZ + ABS(MAGNET_Z(N,R,S))

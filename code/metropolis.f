@@ -124,7 +124,7 @@ C     INITIAL RANDOM SYSTEM (GRAPH+COUPLINGS)
 C***********************************************************************
 C     SPIN CONFIGURATION FILE FOR EACH p VALUE AND SEED
       OPEN(UNIT=1,FILE='results/sample/T'//str1//'_Γ'//str2//
-     *'/S_'//str3//'_'//str4//'.dat',FORM='FORMATTED')
+     *'/S_'//str3//'_'//str4//'.bin',FORM='UNFORMATTED')
 C***********************************************************************
 C     GENERATION OF TWO RANDOM INITIAL SPIN CONFIGURATIONS
       DO i = 1,R
@@ -152,24 +152,24 @@ C     MONTE-CARLO SIMULATION
             END DO
 C           EXTRACT THE SPIN CONFIGURATION EVERY SC MONTE-CARLO STEPS
             IF ((IMC.GT.MCINI).AND.(SC*(IMC/SC).EQ.IMC)) THEN
-                  ! DO i = 1,R
-                  !       CALL ARRAY2BIN(N,bin1,S1(i,:))
-                  !       CALL BIN2DEC(N,zip_size,bin1,decimal1)
-                  !       WRITE(1) decimal1
-                  ! END DO
-                  ! DO i = 1,R
-                  !       CALL ARRAY2BIN(N,bin2,S2(i,:))
-                  !       CALL BIN2DEC(N,zip_size,bin2,decimal2)
-                  !       WRITE(1) decimal2
-                  ! END DO
                   DO i = 1,R
                         CALL ARRAY2BIN(N,bin1,S1(i,:))
-                        WRITE(1,*) bin1
+                        CALL BIN2DEC(N,zip_size,bin1,decimal1)
+                        WRITE(1) decimal1
                   END DO
                   DO i = 1,R
                         CALL ARRAY2BIN(N,bin2,S2(i,:))
-                        WRITE(1,*) bin2
+                        CALL BIN2DEC(N,zip_size,bin2,decimal2)
+                        WRITE(1) decimal2
                   END DO
+                  ! DO i = 1,R
+                  !       CALL ARRAY2BIN(N,bin1,S1(i,:))
+                  !       WRITE(1,*) bin1
+                  ! END DO
+                  ! DO i = 1,R
+                  !       CALL ARRAY2BIN(N,bin2,S2(i,:))
+                  !       WRITE(1,*) bin2
+                  ! END DO
             END IF
       END DO !IMC
 C***********************************************************************
