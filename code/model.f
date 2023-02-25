@@ -326,7 +326,7 @@ C     ARRAY TO BINARY
 C     THIS SUBRUTINE CONVERTS AN ARRAY OF -1 AND 1 TO A BINARY NUMBER
 
       INTEGER i, N, array(1:N)
-      CHARACTER(N) binary
+      CHARACTER(:), ALLOCATABLE :: binary
 
       DO i = 1,N
             binary(i:i) = '0'
@@ -347,7 +347,7 @@ C     BINARY TO DECIMALS
 C     THIS SUBRUTINE CONVERTS A BINARY NUMBER TO N/zip_size DECIMAL NUMBERS
 
       INTEGER i, j, N, zip_size, scale
-      CHARACTER(N) binary
+      CHARACTER(:), ALLOCATABLE :: binary
       INTEGER decimal(1:N/zip_size)
 
       DO j = 1,N/zip_size
@@ -370,7 +370,7 @@ C     DECIMALS TO BINARY
 C     THIS SUBRUTINE CONVERTS N/zip_size DECIMAL NUMBERS TO A BINARY NUMBER
 
       INTEGER i, j, N, zip_size, scale
-      CHARACTER(N) binary
+      CHARACTER(:), ALLOCATABLE :: binary
       INTEGER decimal(1:N/zip_size)
       INTEGER decimal_copy(1:N/zip_size)
 
@@ -397,7 +397,7 @@ C     BINARY TO ARRAY
 C     THIS SUBRUTINE CONVERTS A BINARY NUMBER TO AN ARRAY OF -1 AND 1
 
       INTEGER i, N, array(1:N)
-      CHARACTER(N) binary
+      CHARACTER(:), ALLOCATABLE :: binary
 
       DO i = 1,N
             IF (binary(i:i).EQ.'1') THEN

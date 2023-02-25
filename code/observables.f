@@ -70,6 +70,7 @@ C     READ SIMULATION VARIABLES FROM INPUT FILE
       MCINI = MCTOT/3
 C     ALLOCATION
       ALLOCATE(decimal(1:N/zip_size))
+      ! bin = REPEAT(' ',N)
       bin = ' '
       DO i=1,N
             bin = bin//' '

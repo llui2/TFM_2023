@@ -11,4 +11,4 @@ rm *.o
 rm *.mod
 ./observables.out
 python3 code/mz.py
-#open results/fig1.png
+open results/fig1.pdf
