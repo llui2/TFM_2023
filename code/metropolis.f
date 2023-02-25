@@ -52,6 +52,7 @@ C     STORE SPIN CONFIGURATION AS N/zip_size INTEGERS
       INTEGER zip_size
       CHARACTER(:), ALLOCATABLE:: bin1, bin2
       INTEGER, ALLOCATABLE:: decimal1(:), decimal2(:)
+      INTEGER, ALLOCATABLE:: array1(:), array2(:)
 C-----(DUMMY)-------------------------------------------------
       INTEGER ITEMP, IH, Ip 
       INTEGER IMC
@@ -74,6 +75,8 @@ C     READ SIMULATION VARIABLES FROM INPUT FILE
 C     ALLOCATION
       ALLOCATE(decimal1(1:N/zip_size))
       ALLOCATE(decimal2(1:N/zip_size))
+      ALLOCATE(array1(1:N))
+      ALLOCATE(array2(1:N))
       ! bin1 = REPEAT(' ',N)
       ! bin2 = REPEAT(' ',N)
       bin1=' '
@@ -155,12 +158,14 @@ C     MONTE-CARLO SIMULATION
 C           EXTRACT THE SPIN CONFIGURATION EVERY SC MONTE-CARLO STEPS
             IF ((IMC.GT.MCINI).AND.(SC*(IMC/SC).EQ.IMC)) THEN
                   DO i = 1,R
-                        CALL ARRAY2BIN(N,bin1,S1(i,:))
+                        array1 = S1(i,:)
+                        CALL ARRAY2BIN(N,bin1,array1)
                         CALL BIN2DEC(N,zip_size,bin1,decimal1)
                         WRITE(1) decimal1
                   END DO
                   DO i = 1,R
-                        CALL ARRAY2BIN(N,bin2,S2(i,:))
+                        array2 = S2(i,:)
+                        CALL ARRAY2BIN(N,bin2,array2)
                         CALL BIN2DEC(N,zip_size,bin2,decimal2)
                         WRITE(1) decimal2
                   END DO

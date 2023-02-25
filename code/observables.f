@@ -45,6 +45,7 @@ C     STORE SPIN CONFIGURATION AS N/zip_size INTEGERS
       INTEGER zip_size
       CHARACTER(:), ALLOCATABLE:: bin
       INTEGER, ALLOCATABLE:: decimal(:)
+      INTEGER, ALLOCATABLE:: array(:)
 C-----(OBSERVABLES)-------------------------------------------
 C     MAGNETIZATION (Z COMPONENT)
       REAL*8 MZ
@@ -70,6 +71,7 @@ C     READ SIMULATION VARIABLES FROM INPUT FILE
       MCINI = MCTOT/3
 C     ALLOCATION
       ALLOCATE(decimal(1:N/zip_size))
+      ALLOCATE(array(1:N))
       ! bin = REPEAT(' ',N)
       bin = ' '
       DO i=1,N
@@ -130,7 +132,8 @@ C***********************************************************************
             DO i=1,R
                   READ(3) decimal
                   CALL DEC2BIN(N,zip_size,bin,decimal)
-                  CALL BIN2ARRAY(N,bin,S(i,:))
+                  CALL BIN2ARRAY(N,bin,array)
+                  S(i,:) = array
                   ! READ(3,*) bin
                   ! CALL BIN2ARRAY(N,bin,S(i,:))
             END DO

@@ -325,7 +325,8 @@ C     ARRAY TO BINARY
       SUBROUTINE ARRAY2BIN(N,binary,array)
 C     THIS SUBRUTINE CONVERTS AN ARRAY OF -1 AND 1 TO A BINARY NUMBER
 
-      INTEGER i, N, array(1:N)
+      INTEGER i, N
+      INTEGER array(1:N)
       CHARACTER(:), ALLOCATABLE :: binary
 
       DO i = 1,N
@@ -396,7 +397,8 @@ C     BINARY TO ARRAY
       SUBROUTINE BIN2ARRAY(N,binary,array)
 C     THIS SUBRUTINE CONVERTS A BINARY NUMBER TO AN ARRAY OF -1 AND 1
 
-      INTEGER i, N, array(1:N)
+      INTEGER i, N
+      INTEGER,INTENT(OUT) :: array(1:N)
       CHARACTER(:), ALLOCATABLE :: binary
 
       DO i = 1,N
