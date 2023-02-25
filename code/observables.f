@@ -20,6 +20,7 @@ C     TEMPERATURE (TEMP := k_B·T)
 C     H (:= Γ = TRANSVERSE FIELD)
       REAL*8 H
 C     p-LIST, TEMP-LIST, Γ-LIST
+      INTEGER p_SIZE, TEMP_SIZE, H_SIZE
       REAL*8,ALLOCATABLE:: p_LIST(:), TEMP_LIST(:), H_LIST(:)
 C     PRINCIPAL ARRAYS
       TYPE(MULTI_ARRAY),ALLOCATABLE:: NBR(:)
@@ -64,8 +65,8 @@ C-----------------------------------------------------------------------
 
 C***********************************************************************
 C     READ SIMULATION VARIABLES FROM INPUT FILE
-      CALL READ_INPUT(N,z,R,TEMP_LIST,H_LIST,p_LIST,C,NSEEDS,SC
-     .               ,zip_size)
+      CALL READ_INPUT(N,z,R,TEMP_SIZE,TEMP_LIST,H_SIZE,H_LIST,
+     . p_SIZE,p_LIST,C,NSEEDS,SC,zip_size)
       M = z*N/2
       MCTOT = 3*C*SC/2
       MCINI = MCTOT/3
@@ -88,19 +89,19 @@ C***********************************************************************
 C***********************************************************************
 
 C     FOR ALL TEMP VALUES
-      DO ITEMP = 1,SIZE(TEMP_LIST)
+      DO ITEMP = 1,TEMP_SIZE
       TEMP = TEMP_LIST(ITEMP)
       WRITE(str,'(f4.2)') TEMP
       str1 = str(1:1)//str(3:4)
 
 C     FOR ALL Γ VALUES      
-      DO IH = 1,SIZE(H_LIST)
+      DO IH = 1,H_SIZE
       H = H_LIST(IH)
       WRITE(str,'(f4.2)') H
       str2 = str(1:1)//str(3:4)
 
 C     FOR ALL p VALUES
-      DO Ip = 1,SIZE(p_LIST)
+      DO Ip = 1,p_SIZE
       p = p_LIST(IP)
       WRITE(str,'(f4.2)') p
       str3 = str(1:1)//str(3:4)

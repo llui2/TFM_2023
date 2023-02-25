@@ -20,6 +20,7 @@ C     TEMPERATURE (TEMP := k_B·T)
 C     H (:= Γ = TRANSVERSE FIELD)
       REAL*8 H
 C     p-LIST, TEMP-LIST, Γ-LIST
+      INTEGER p_SIZE, TEMP_SIZE, H_SIZE
       REAL*8,ALLOCATABLE:: p_LIST(:), TEMP_LIST(:), H_LIST(:)
 C     PRINCIPAL ARRAYS
       TYPE(MULTI_ARRAY),ALLOCATABLE:: NBR(:)
@@ -67,8 +68,8 @@ C-----------------------------------------------------------------------
 
 C***********************************************************************
 C     READ SIMULATION VARIABLES FROM INPUT FILE
-      CALL READ_INPUT(N,z,R,TEMP_LIST,H_LIST,p_LIST,C,NSEEDS,SC
-     .               ,zip_size)
+      CALL READ_INPUT(N,z,R,TEMP_SIZE,TEMP_LIST,H_SIZE,H_LIST,
+     . p_SIZE,p_LIST,C,NSEEDS,SC,zip_size)
       M = z*N/2
       MCTOT = 3*C*SC/2
       MCINI = MCTOT/3
@@ -88,13 +89,13 @@ C     INITIAL SEED NUMBER
 C***********************************************************************
 
 C     FOR ALL TEMP VALUES
-      DO ITEMP = 1,SIZE(TEMP_LIST)
+      DO ITEMP = 1,TEMP_SIZE
       TEMP = TEMP_LIST(ITEMP)
       WRITE(str,'(f4.2)') TEMP
       str1 = str(1:1)//str(3:4)
 
 C     FOR ALL Γ VALUES      
-      DO IH = 1,SIZE(H_LIST)
+      DO IH = 1,H_SIZE
       H = H_LIST(IH)
       WRITE(str,'(f4.2)') H
       str2 = str(1:1)//str(3:4)
@@ -107,7 +108,7 @@ C     COPY INPUT FILE TO THE RESULTS FOLDER
 C***********************************************************************
 
 C     FOR ALL p VALUES
-      DO Ip = 1,SIZE(p_LIST)
+      DO Ip = 1,p_SIZE
       p = p_LIST(IP)
       WRITE(str,'(f4.2)') p
       str3 = str(1:1)//str(3:4)
@@ -189,8 +190,7 @@ C***********************************************************************
       IF ((SEED.EQ.SEEDini).AND.(p.EQ.p_LIST(1)).AND. 
      .(TEMP.EQ.TEMP_LIST(1)).AND.(H.EQ.H_LIST(1))) THEN
       CALL CPU_TIME(TIME2)
-      time = (TIME2-TIME1)*NSEEDS*SIZE(H_LIST)*SIZE(p_LIST)*
-     .SIZE(TEMP_LIST)
+      time = (TIME2-TIME1)*NSEEDS*H_SIZE*p_SIZE*TEMP_SIZE
       WRITE(*,200) "ESTIMATED TIME: ", INT(time/3600), ' h',
      . INT((time/3600-INT(time/3600))*60), ' min', 
      . INT((time/60-INT(time/60))*60), ' s'

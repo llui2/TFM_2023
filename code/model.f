@@ -19,8 +19,8 @@ C-----------------------------------------------------------------------
 
 C-----------------------------------------------------------------------
 C     READ INPUT FILE
-      SUBROUTINE READ_INPUT(N,z,R,TEMP_LIST,H_LIST,p_LIST,C,NSEEDS,SC
-     . ,zip_size)
+      SUBROUTINE READ_INPUT(N,z,R,TEMP_SIZE,TEMP_LIST,H_SIZE,H_LIST,
+     . p_SIZE,p_LIST,C,NSEEDS,SC,zip_size)
 
       INTEGER N,z
       INTEGER R
@@ -465,6 +465,21 @@ C     REMOVE INDEX FROM LIST
 
       RETURN
       END SUBROUTINE RMVOFLIST
+C-----------------------------------------------------------------------
+
+C-----------------------------------------------------------------------
+C     GET SIZE OF ARRAY
+      INTEGER FUNCTION GETSIZE(ARR)
+
+      INTEGER I, SIZE
+      I = 1
+      DO WHILE (ARR(I).NE.0)
+            I = I + 1
+      END DO
+      SIZE = I - 1
+      GETSIZE = SIZE
+
+      END FUNCTION GETSIZE
 C-----------------------------------------------------------------------
 
       END MODULE MODEL
