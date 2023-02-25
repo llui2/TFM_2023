@@ -10,6 +10,6 @@ gfortran observables.o model.o r1279.o ran2.o -o observables.out
 rm *.o
 rm *.mod
 ./observables.out
-#rm *.out
-python3 code/mz.py
-open results/fig1.pdf
+rm *.out
+#python3 code/mz.py
+#open results/fig1.pdf
