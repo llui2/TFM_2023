@@ -2,7 +2,7 @@ C     METROPOLIS SAMPLE GENERATOR
 C     0!
 C     Lluís Torres 
 C     TFM
-C     FORTRAN 2003
+C     FORTRAN 77
 
       PROGRAM SAMPLE_GENERATOR
 
@@ -39,6 +39,7 @@ C     NUMBER OF GRAPHS TO SIMULATE FOR EVERY P VALUE
       INTEGER NSEEDS
 C     SEED NUMBER, INITIAL SEED NUMBER
       INTEGER SEED, SEEDini
+      PARAMETER(SEEDini = 100)
 C     RANDOM NUMBER GENERATOR
       EXTERNAL r1279
 C     ESTIMATE TIME VARIABLES
@@ -59,6 +60,7 @@ C-----(DUMMY)-------------------------------------------------
       INTEGER IMC
       CHARACTER(4) str
       CHARACTER(3) str1, str2, str3, str4
+      !CHARACTER(2) strN
 
 C-----------------------------------------------------------------------
 C     START
@@ -83,8 +85,6 @@ C     ALLOCATION
       ALLOCATE(S1(1:R,1:N))
       ALLOCATE(S2(1:R,1:N))
 C***********************************************************************
-C     INITIAL SEED NUMBER
-      SEEDini = 100
       CALL CPU_TIME(TIME1)
 C***********************************************************************
 
@@ -164,13 +164,17 @@ C           EXTRACT THE SPIN CONFIGURATION EVERY SC MONTE-CARLO STEPS
                         CALL BIN2DEC(N,zip_size,bin2,decimal2)
                         WRITE(1) decimal2
                   END DO
+                  ! TO VISUALIZE SPIN CONFIG:
+                  ! UNCOMMENT line 26
+                  ! CHANGE .bin to .dat and UNFORMATED to FORMATED at line 126
+                  ! write(strN,'(I2)') N
                   ! DO i = 1,R
                   !       CALL ARRAY2BIN(N,bin1,S1(i,:))
-                  !       WRITE(1,*) bin1
+                  !       WRITE(1,"("//strN//"(I1))") bin1
                   ! END DO
                   ! DO i = 1,R
                   !       CALL ARRAY2BIN(N,bin2,S2(i,:))
-                  !       WRITE(1,*) bin2
+                  !       WRITE(1,"("//strN//"(I1))") bin2
                   ! END DO
             END IF
       END DO !IMC

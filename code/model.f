@@ -415,7 +415,7 @@ C-----------------------------------------------------------------------
 
 C------------------------------------------------------------------
 C     ADD ELEMENT TO LIST
-      SUBROUTINE ADDTOLIST(list, element)
+      SUBROUTINE ADDTOLIST(list,element)
 
       INTEGER i, isize
       INTEGER element
@@ -442,7 +442,7 @@ C-----------------------------------------------------------------------
 
 C-----------------------------------------------------------------------
 C     REMOVE INDEX FROM LIST
-      SUBROUTINE RMVOFLIST(list, index)
+      SUBROUTINE RMVOFLIST(list,index)
 
       INTEGER i, isize
       INTEGER index
@@ -465,21 +465,6 @@ C     REMOVE INDEX FROM LIST
 
       RETURN
       END SUBROUTINE RMVOFLIST
-C-----------------------------------------------------------------------
-
-C-----------------------------------------------------------------------
-C     GET SIZE OF ARRAY
-      INTEGER FUNCTION GETSIZE(ARR)
-
-      INTEGER I, SIZE
-      I = 1
-      DO WHILE (ARR(I).NE.0)
-            I = I + 1
-      END DO
-      SIZE = I - 1
-      GETSIZE = SIZE
-
-      END FUNCTION GETSIZE
 C-----------------------------------------------------------------------
 
       END MODULE MODEL
