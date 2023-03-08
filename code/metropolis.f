@@ -11,7 +11,7 @@ C     FORTRAN 77
 C-----(SYSTEM)------------------------------------------------
 C     NODES, EDGES, CONNECTIVITY
       INTEGER N, M, z
-C     NUMBER OF REPLICAS 
+C     TROTTER INDEX 
       INTEGER R
 C     +1 -1 EDGES RATIO (1 => ALL +1), (0 => ALL -1)
       REAL*8 p
