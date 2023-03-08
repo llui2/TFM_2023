@@ -39,6 +39,7 @@ C     NUMBER OF GRAPHS TO SIMULATE FOR EVERY P VALUE
       INTEGER NSEEDS
 C     SEED NUMBER, INITIAL SEED NUMBER
       INTEGER SEED, SEEDini
+      PARAMETER(SEEDini = 100)
 C     SIMULATION VARIABLES
       INTEGER, ALLOCATABLE:: S(:,:)
 C-----(SPIN CONFIGURATION SAVING VARIABLES)-------------------
@@ -56,7 +57,10 @@ C-----(DUMMY)-------------------------------------------------
       INTEGER ITEMP, IH, Ip, IC
       CHARACTER(4) str
       CHARACTER(3) str1, str2, str3, str4
-      
+C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      !CHARACTER(2) strN
+C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      INTEGER TAU !NOT USED IN THIS PROGRAM
 C-----------------------------------------------------------------------
 C     START
 C-----------------------------------------------------------------------
@@ -66,9 +70,9 @@ C-----------------------------------------------------------------------
 C***********************************************************************
 C     READ SIMULATION VARIABLES FROM INPUT FILE
       CALL READ_INPUT(N,z,R,TEMP_SIZE,TEMP_LIST,H_SIZE,H_LIST,
-     . p_SIZE,p_LIST,C,NSEEDS,SC,zip_size)
+     . p_SIZE,p_LIST,C,NSEEDS,SC,zip_size,TAU)
       M = z*N/2
-      MCTOT = 3*C*SC/2
+      MCTOT = 3*C*SC/4
       MCINI = MCTOT/3
 C     ALLOCATION
       ALLOCATE(decimal(1:N/zip_size))
@@ -76,8 +80,6 @@ C     ALLOCATION
       ALLOCATE(bin(1:N))
       ALLOCATE(S(1:R,1:N))
 C***********************************************************************
-C     INITIAL SEED NUMBER
-      SEEDini = 100
       CALL CPU_TIME(TIME1)
 C***********************************************************************
       CALL SYSTEM('mkdir -p results/observables/')
@@ -123,16 +125,21 @@ C     RECALL RANDOM SYSTEM (GRAPH+COUPLINGS)
 C***********************************************************************
 C     READ SPIN CONFIGURATIONS FROM FILE
       OPEN(UNIT=3,FILE='results/sample/T'//str1//'_Γ'//str2//
-     *'/S_'//str3//'_'//str4//'.bin',FORM='UNFORMATTED')
+     .'/S_'//str3//'_'//str4//'.bin',FORM='UNFORMATTED')
 C***********************************************************************
-      DO IC = 1,2*C
+      DO IC = 1,C
             DO i=1,R
                   READ(3) decimal
                   CALL DEC2BIN(N,zip_size,bin,decimal)
                   CALL BIN2ARRAY(N,bin,array)
                   S(i,:) = array
-                  ! READ(3,*) bin
+C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ! IF CONFIGURATION WAS SAVED AS BINARY TO VISUALIZE
+                  ! UNCOMMENT strN DECLARATION
+                  ! CHANGE .bin to .dat and UNFORMATED to FORMATED for UNIT=3
+                  ! READ(3,"("//strN//"(I1))") bin
                   ! CALL BIN2ARRAY(N,bin,S(i,:))
+C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             END DO
 C           OBSERVABLES
             MZ = MZ + ABS(MAGNET_Z(N,R,S))
@@ -157,8 +164,8 @@ C***********************************************************************
 C***********************************************************************
 C     SAVE OBSERVABLES     
 200   FORMAT(F4.2,4X,F4.2,4X,F4.2,4X,F13.10)
-      WRITE(1,200) TEMP, H, p, MZ/(2*C*NSEEDS)
-      WRITE(2,200) TEMP, H, p, MX/(2*C*NSEEDS)
+      WRITE(1,200) TEMP, H, p, MZ/(C*NSEEDS)
+      WRITE(2,200) TEMP, H, p, MX/(C*NSEEDS)
 C***********************************************************************
 
       END DO !Ip

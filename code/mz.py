@@ -22,7 +22,6 @@ for i in range(len(H_values)):
        plot_MZ = []
 
        for j in range(len(H)):
-              print('j',j,H[j])
               if H[j] == H_values[i]:
                      plot_TEMP.append(TEMP[j])
                      plot_MZ.append(MZ[j])

@@ -20,7 +20,7 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     READ INPUT FILE
       SUBROUTINE READ_INPUT(N,z,R,TEMP_SIZE,TEMP_LIST,H_SIZE,H_LIST,
-     . p_SIZE,p_LIST,C,NSEEDS,SC,zip_size)
+     . p_SIZE,p_LIST,C,NSEEDS,SC,zip_size,TAU)
 
       INTEGER N,z
       INTEGER R
@@ -34,6 +34,7 @@ C     READ INPUT FILE
       INTEGER NSEEDS
       INTEGER SC
       INTEGER zip_size
+      INTEGER TAU
 
       OPEN(UNIT=0,FILE="input.txt")
       
@@ -61,6 +62,8 @@ C     READ INPUT FILE
       READ(0,*) SC
       READ(0,*)
       READ(0,*) zip_size
+      READ(0,*)
+      READ(0,*) TAU
       
       CLOSE(0)
 
@@ -189,7 +192,7 @@ C     THIS FUNCTION CALCULATES THE ENERGY OF THE SYSTEM GIVEN A CONFIGURATION
       END DO
       ABOVE(R) = 1
 
-      K2 = (TEMP/2.)*LOG(TANH(H/(TEMP*R)))
+      K2 = -(TEMP/2.)*LOG(TANH(H/(TEMP*R)))
 
       HD = 0.0d0 !DIAGONAL TERM
       V = 0.0d0 !TRANSVERSE FIELD TERM
@@ -203,7 +206,7 @@ C     THIS FUNCTION CALCULATES THE ENERGY OF THE SYSTEM GIVEN A CONFIGURATION
             END DO
       END DO
 
-      ENERG =  -HD/(2*R) + K2*V
+      ENERG =  -HD/(2*R) -K2*V
       
       RETURN
       END FUNCTION ENERG
@@ -304,8 +307,8 @@ C     CALCULATION OF ΔHD
       DHD = 2*DHD*S(i,j)/R
 
 C     CALCULATION OF ΔV
-      K2 = (TEMP/2.)*LOG(TANH(H/(TEMP*R)))
-      DV = -K2*S(i,j)*S(PBC(i+1),j)-K2*S(i,j)*S(PBC(i-1),j)
+      K2 = -(TEMP/2.)*LOG(TANH(H/(TEMP*R)))
+      DV = K2*S(i,j)*(S(PBC(i+1),j)+S(PBC(i-1),j))
 
 C     CALCULATION OF ΔH
       DE = DHD + DV
@@ -466,5 +469,40 @@ C     REMOVE INDEX FROM LIST
       RETURN
       END SUBROUTINE RMVOFLIST
 C-----------------------------------------------------------------------
+
+! C------------------------------------------------------------------------------
+!       REAL*8 FUNCTION PSEUDO(N,R,C,S_SET,TEMP,NBR,JJ)
+! C     THIS FUNCTION CALCULATES THE PSEUDOLIKELIHOOD FOR A GIVEN TEMP,
+! C     S_SET AND GRAPH DEFINED BY NBR AND JJ
+!       IMPLICIT NONE
+!       INTEGER N, R, C, i, k, m
+!       REAL*8 TEMP
+!       REAL*8 L
+!       REAL*8 sum
+
+!       INTEGER S_SET(1:C,1:R,1:N)
+!       TYPE(MULTI_ARRAY),ALLOCATABLE:: NBR(:)
+!       TYPE(MULTI_ARRAY),ALLOCATABLE:: JJ(:)
+
+!       PSEUDO = 0.0d0
+!       L = 0.0d0
+!       sum = 0.0d0
+
+!       DO i = 1,N
+!       DO m = 1,C
+!             DO k = 1, SIZE(JJ(i)%V)
+!                   sum = sum + JJ(i)%V(k)*S_SET(m,NBR(i)%V(k))
+!             ENDDO
+            
+!             L = L + LOG(0.5d0*(1 + S_SET(m,i)*EXP(TEMP*sum)))
+!             sum = 0.0d0
+!       ENDDO
+!       PSEUDO = PSEUDO + L
+!       L = 0.0d0
+!       ENDDO
+
+!       RETURN
+!       END FUNCTION PSEUDO
+! C------------------------------------------------------------------------------
 
       END MODULE MODEL

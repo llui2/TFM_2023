@@ -6,4 +6,6 @@ git.txt
 plots/*.pdf
 code/*.mod
 *.mod
+*.out
+*.o
 README.md

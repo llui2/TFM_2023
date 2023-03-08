@@ -28,6 +28,6 @@ cd $TMPDIR/
 ./metropolis.out
 ./observables.out
 # Finally, we copy back all important output to the working directory
-scp -r results nodo00:$SGE_O_WORKDIR/RESULTS_$JOB_ID
+scp -r results nodo00:$SGE_O_WORKDIR/results-$JOB_ID
 
 

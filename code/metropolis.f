@@ -60,7 +60,10 @@ C-----(DUMMY)-------------------------------------------------
       INTEGER IMC
       CHARACTER(4) str
       CHARACTER(3) str1, str2, str3, str4
+C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       !CHARACTER(2) strN
+C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      INTEGER TAU !NOT USED IN THIS PROGRAM
 
 C-----------------------------------------------------------------------
 C     START
@@ -71,9 +74,9 @@ C-----------------------------------------------------------------------
 C***********************************************************************
 C     READ SIMULATION VARIABLES FROM INPUT FILE
       CALL READ_INPUT(N,z,R,TEMP_SIZE,TEMP_LIST,H_SIZE,H_LIST,
-     . p_SIZE,p_LIST,C,NSEEDS,SC,zip_size)
+     . p_SIZE,p_LIST,C,NSEEDS,SC,zip_size,TAU)
       M = z*N/2
-      MCTOT = 3*C*SC/2
+      MCTOT = 3*C*SC/4
       MCINI = MCTOT/3
 C     ALLOCATION
       ALLOCATE(decimal1(1:N/zip_size))
@@ -124,7 +127,7 @@ C     INITIAL RANDOM SYSTEM (GRAPH+COUPLINGS)
 C***********************************************************************
 C     SPIN CONFIGURATION FILE FOR EACH p VALUE AND SEED
       OPEN(UNIT=1,FILE='results/sample/T'//str1//'_Γ'//str2//
-     *'/S_'//str3//'_'//str4//'.bin',FORM='UNFORMATTED')
+     .'/S_'//str3//'_'//str4//'.bin',FORM='UNFORMATTED')
 C***********************************************************************
 C     GENERATION OF TWO RANDOM INITIAL SPIN CONFIGURATIONS
       DO i = 1,R
@@ -164,9 +167,10 @@ C           EXTRACT THE SPIN CONFIGURATION EVERY SC MONTE-CARLO STEPS
                         CALL BIN2DEC(N,zip_size,bin2,decimal2)
                         WRITE(1) decimal2
                   END DO
+C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                   ! TO VISUALIZE SPIN CONFIG:
-                  ! UNCOMMENT line 26
-                  ! CHANGE .bin to .dat and UNFORMATED to FORMATED at line 126
+                  ! UNCOMMENT strN DECLARATION
+                  ! CHANGE .bin to .dat and UNFORMATED to FORMATED for UNIT=1
                   ! write(strN,'(I2)') N
                   ! DO i = 1,R
                   !       CALL ARRAY2BIN(N,bin1,S1(i,:))
@@ -176,6 +180,7 @@ C           EXTRACT THE SPIN CONFIGURATION EVERY SC MONTE-CARLO STEPS
                   !       CALL ARRAY2BIN(N,bin2,S2(i,:))
                   !       WRITE(1,"("//strN//"(I1))") bin2
                   ! END DO
+C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             END IF
       END DO !IMC
 C***********************************************************************
@@ -190,6 +195,7 @@ C     DELLOCATE ARRAYS
       DEALLOCATE(INBR)
       DEALLOCATE(JJ)
 C***********************************************************************
+C     ESTIMATE EXECUTION TIME
 200   FORMAT (A,I4,A,I3,A,I3,A,I3,A,I3,A,I3)
       IF ((SEED.EQ.SEEDini).AND.(p.EQ.p_LIST(1)).AND. 
      .(TEMP.EQ.TEMP_LIST(1)).AND.(H.EQ.H_LIST(1))) THEN
