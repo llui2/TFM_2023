@@ -2,7 +2,7 @@ C     RECONSTRUCTION
 C     0!
 C     Lluís Torres 
 C     TFM
-C     FORTRAN 77
+C     FORTRAN 95
 
       PROGRAM RECONSTRUCTION
 
@@ -45,7 +45,7 @@ C     RANDOM NUMBER GENERATOR
 C     ESTIMATE TIME VARIABLES
       REAL*4 TIME1, TIME2, time
 C     SIMULATION VARIABLES
-      INTEGER, ALLOCATABLE:: S_SET(:,:,:)
+      INTEGER, ALLOCATABLE:: D(:,:,:)
       TYPE(MULTI_ARRAY),ALLOCATABLE:: NBR(:)
       TYPE(MULTI_ARRAY),ALLOCATABLE:: INBR(:)
       TYPE(MULTI_ARRAY),ALLOCATABLE:: JJ(:)
@@ -81,7 +81,7 @@ C     ALLOCATION
       ALLOCATE(decimal(1:N/zip_size))
       ALLOCATE(array(1:N))
       ALLOCATE(bin(1:N))
-      ALLOCATE(S_SET(1:C,1:R,1:N))
+      ALLOCATE(D(1:C,1:R,1:N))
 C***********************************************************************
       CALL CPU_TIME(TIME1)
 C***********************************************************************
@@ -121,7 +121,7 @@ C     READ THE SAMPLE
                   READ(1) decimal
                   CALL DEC2BIN(N,zip_size,bin,decimal)
                   CALL BIN2ARRAY(N,bin,array)
-                  S_SET(IC,IR,:) = array
+                  D(IC,IR,:) = array
             END DO
       END DO
       CLOSE(1)
@@ -138,7 +138,9 @@ C***********************************************************************
       !CALL CLASS_LAMBDA(N,C,S_SET,NBR,JJ,LAMBDA)
 C***********************************************************************
 C     INITIAL PSEUDOLIKELIHOOD
-      PL = PSEUDO(N,R,C,S_SET,TEMP,NBR,JJ)
+      PL = PSEUDO(N,R,C,D,TEMP,H,NBR,JJ)
+      PRINT*, 'PSEUDO = ', PL
+      CALL EXIT(0)
 C***********************************************************************
 
 

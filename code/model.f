@@ -2,9 +2,10 @@ C     SPIN MODEL MODULE
 C     0!
 C     Lluís Torres 
 C     TFG
-C     FORTRAN 77
+C     FORTRAN 95
 
-      MODULE MODEL ! RANDOM ERDÖS-RÉNYI GRAPH WITH RANDOM COUPLINGS
+      MODULE MODEL 
+C     QUANTUM SPIN SYSTEM ON A RANDOM ERDÖS-RÉNYI GRAPH WITH RANDOM COUPLINGS
 
 C     MULTI ARRAY TYPE
       TYPE :: MULTI_ARRAY
@@ -74,23 +75,19 @@ C-----------------------------------------------------------------------
 C-----------------------------------------------------------------------
 C     RANDOM ERDÖS-RÉNYI GRAPH WITH RANDOM COUPLINGS GENERATOR
       SUBROUTINE IRS(N,M,p,NBR,INBR,JJ)
-C     THIS SUBROUTINE GENERATES A RANDOM ERDÖS-RÉNYI GRAPH WITH p*M EDGES WITH
-C     A WEIGHT OF 1 AND (1-p)*M EDGES WITH A WEIGHT OF 1
-C     AND SAVES IT IN THE NBR, INBR AND JJ ARRAYS.
+C     THIS SUBROUTINE GENERATES A RANDOM ERDÖS-RÉNYI GRAPH WITH p*M EDGES
+C     WITH A WEIGHT OF 1 AND (1-p)*M EDGES WITH A WEIGHT OF 1 AND SAVES
+C     IT IN THE NBR, INBR AND JJ ARRAYS.
 
-      INTEGER i, j, k
-C     NODES, EDGES
       INTEGER N, M
-C     U(0,1) RANDOM NUMBER
-      EXTERNAL r1279
-      !REAL*8 genrand_real2
-C     FRACTION OF EDGES WITH VALUE 1
       REAL*8 p
-      INTEGER edges_p, edges_n
-
       TYPE(MULTI_ARRAY),ALLOCATABLE:: NBR(:)
       TYPE(MULTI_ARRAY),ALLOCATABLE:: INBR(:)
       TYPE(MULTI_ARRAY),ALLOCATABLE:: JJ(:)
+
+      INTEGER i, j, k
+      EXTERNAL r1279
+      INTEGER edges_p, edges_n
 
       edges_p = INT(p*M)
       edges_n = INT((1-p)*M)
@@ -120,7 +117,7 @@ C     GENERATE M/2 EDGES OF WEIGHT 1
             j = MOD(INT(r1279()*N),N) + 1
 
             IF ((i.gt.N).or.(j.gt.N)) THEN
-                  PRINT*, 'ERROR'
+                  PRINT*, 'ERROR: i OR j OUT OF RANGE'
                   STOP
             END IF
 
@@ -140,7 +137,7 @@ C     GENERATE M/2 EDGES OF WEIGHT -1
             j = MOD(INT(r1279()*N),N) + 1 
 
             IF ((i.gt.N).or.(j.gt.N)) THEN
-                  PRINT*, 'ERROR'
+                  PRINT*, 'ERROR: i OR j OUT OF RANGE'
                   STOP
             END IF
 
@@ -181,18 +178,17 @@ C     THIS FUNCTION CALCULATES THE ENERGY OF THE SYSTEM GIVEN A CONFIGURATION
       TYPE(MULTI_ARRAY),ALLOCATABLE:: NBR(:)
       TYPE(MULTI_ARRAY),ALLOCATABLE:: JJ(:)
 
+      INTEGER i, j, k
       REAL*8 K2
       REAL*8 HD, V
       INTEGER ABOVE(1:R) !SPIN ABOVE i
 
-      INTEGER i, j, k
-      
       DO i=1,R-1
             ABOVE(i) = i+1
       END DO
       ABOVE(R) = 1
 
-      K2 = -(TEMP/2.)*LOG(TANH(H/(TEMP*R)))
+      K2 = -(TEMP/2)*LOG(TANH(H/(TEMP*R)))
 
       HD = 0.0d0 !DIAGONAL TERM
       V = 0.0d0 !TRANSVERSE FIELD TERM
@@ -206,7 +202,7 @@ C     THIS FUNCTION CALCULATES THE ENERGY OF THE SYSTEM GIVEN A CONFIGURATION
             END DO
       END DO
 
-      ENERG =  -HD/(2*R) -K2*V
+      ENERG =  - HD/(2*R) - K2*V
       
       RETURN
       END FUNCTION ENERG
@@ -219,16 +215,16 @@ C-----------------------------------------------------------------------
       INTEGER S(1:R,1:N)
 
       INTEGER i, j
-      REAL*8 MAG
+      REAL*8 SUM
       
-      MAG = 0.D0
+      SUM = 0.D0
       DO i = 1,R
             DO j = 1,N
-                  MAG = MAG + S(i,j)
+                  SUM = SUM + S(i,j)
             END DO
       END DO
 
-      MAGNET_Z = MAG/(N*R)
+      MAGNET_Z = SUM/(N*R)
 
       RETURN
       END FUNCTION MAGNET_Z
@@ -242,20 +238,20 @@ C-----------------------------------------------------------------------
       REAL*8 TEMP, H
 
       INTEGER i, j
-      INTEGER PBC(1:R) !PERIODIC BOUNDARY CONDITIONS IN THE R DIRECTION
+      INTEGER ABOVE(1:R) !SPIN ABOVE i
       REAL*8 K, MAG
 
       DO i=1,R-1
-            PBC(i) = i+1
+            ABOVE(i) = i+1
       END DO
-      PBC(R) = 1
+      ABOVE(R) = 1
 
       K = TAN(H/(TEMP*R))
 
       MAG = 0.D0
       DO i = 1,R
             DO j = 1,N
-                  MAG = MAG + K**(S(i,j)*S(PBC(i),j))
+                  MAG = MAG + K**(S(i,j)*S(ABOVE(i),j))
             END DO
       END DO
       MAGNET_X = MAG/(N*R)
@@ -266,26 +262,24 @@ C-----------------------------------------------------------------------
 
 C-----------------------------------------------------------------------
 C     METROPOLIS ALGORITHM 
-      SUBROUTINE METROPOLIS(S,N,R,valid,TEMP,H,DE,NBR,JJ)
-C     THIS SUBROUTINE PROPOSES A CHANGE OF SPIN IN A RANDOM NODE,
-C     CALCULATES THE ENERGY VARIATION OF THE SYSTEM (ΔH_eff) DUE TO IT,
-C     IF ΔH_eff < 0 THEN THE CHANGE IS ACCPETED, ELSE IF ΔH_eff > 0 THEN THE
-C     CHANGE IS ACCEPTED WITH A PROBABILITY OF EXP(-ΔH_eff/k_BT).
+      SUBROUTINE METROPOLIS(N,R,S,valid,TEMP,H,DE,NBR,JJ)
+C     THIS SUBROUTINE PROPOSES A CHANGE OF SPIN IN A RANDOM NODE, CALCULATES
+C     THE ENERGY VARIATION OF THE SYSTEM (ΔH_eff) DUE TO IT, IF ΔH_eff < 0
+C     THEN THE CHANGE IS ACCPETED, ELSE IF ΔH_eff > 0 THEN THE CHANGE IS 
+C     ACCEPTED WITH A PROBABILITY OF EXP(-ΔH_eff/k_BT).
 
       INTEGER N, R
       INTEGER S(1:R,1:N)
-      EXTERNAL r1279
-      !REAL*8 genrand_real2
       LOGICAL valid
-      REAL*8 TEMP
-      REAL*8 H
+      REAL*8 TEMP, H, DE
       TYPE(MULTI_ARRAY),ALLOCATABLE:: NBR(:)
       TYPE(MULTI_ARRAY),ALLOCATABLE:: JJ(:)
 
-      REAL*8 DHD, DV, DE
+      EXTERNAL r1279
+      REAL*8 DHD, DV
       REAL*8 K2
 
-      INTEGER PBC(0:R+1)
+      INTEGER PBC(0:R+1) !PBC IN THE TROTTER DIRECTION
 
       PBC(0)=R
       DO i=1,R
@@ -328,9 +322,11 @@ C     ARRAY TO BINARY
       SUBROUTINE ARRAY2BIN(N,binary,array)
 C     THIS SUBRUTINE CONVERTS AN ARRAY OF -1 AND 1 TO A BINARY NUMBER
 
-      INTEGER i, N
-      INTEGER array(1:N)
+      INTEGER N
       INTEGER, ALLOCATABLE :: binary(:)
+      INTEGER array(1:N)
+
+      INTEGER i
 
       DO i = 1,N
             binary(i) = 0
@@ -350,9 +346,11 @@ C     BINARY TO DECIMALS
       SUBROUTINE BIN2DEC(N,zip_size,binary,decimal)
 C     THIS SUBRUTINE CONVERTS A BINARY NUMBER TO N/zip_size DECIMAL NUMBERS
 
-      INTEGER i, j, N, zip_size, scale
+      INTEGER N, zip_size
       INTEGER, ALLOCATABLE :: binary(:)
       INTEGER decimal(1:N/zip_size)
+
+      INTEGER i, j, scale
 
       DO j = 1,N/zip_size
             decimal(j) = 0
@@ -373,9 +371,11 @@ C     DECIMALS TO BINARY
       SUBROUTINE DEC2BIN(N,zip_size,binary,decimal)
 C     THIS SUBRUTINE CONVERTS N/zip_size DECIMAL NUMBERS TO A BINARY NUMBER
 
-      INTEGER i, j, N, zip_size, scale
+      INTEGER N, zip_size
       INTEGER, ALLOCATABLE :: binary(:)
       INTEGER decimal(1:N/zip_size)
+
+      INTEGER i, j, scale
       INTEGER decimal_copy(1:N/zip_size)
 
       decimal_copy = decimal
@@ -400,9 +400,11 @@ C     BINARY TO ARRAY
       SUBROUTINE BIN2ARRAY(N,binary,array)
 C     THIS SUBRUTINE CONVERTS A BINARY NUMBER TO AN ARRAY OF -1 AND 1
 
-      INTEGER i, N
-      INTEGER array(1:N)
+      INTEGER N
       INTEGER, ALLOCATABLE :: binary(:)
+      INTEGER array(1:N)
+
+      INTEGER i
 
       DO i = 1,N
             IF (binary(i).EQ.1) THEN
@@ -420,9 +422,10 @@ C------------------------------------------------------------------
 C     ADD ELEMENT TO LIST
       SUBROUTINE ADDTOLIST(list,element)
 
-      INTEGER i, isize
-      INTEGER element
       INTEGER, DIMENSION(:), ALLOCATABLE:: list
+      INTEGER element
+
+      INTEGER i, isize
       INTEGER, DIMENSION(:), ALLOCATABLE :: clist
 
       IF (ALLOCATED(list)) THEN
@@ -447,9 +450,10 @@ C-----------------------------------------------------------------------
 C     REMOVE INDEX FROM LIST
       SUBROUTINE RMVOFLIST(list,index)
 
-      INTEGER i, isize
-      INTEGER index
       INTEGER, DIMENSION(:), ALLOCATABLE:: list
+      INTEGER index
+
+      INTEGER i, isize
       INTEGER, DIMENSION(:), ALLOCATABLE:: clist
 
       IF (ALLOCATED(list)) THEN
@@ -470,39 +474,52 @@ C     REMOVE INDEX FROM LIST
       END SUBROUTINE RMVOFLIST
 C-----------------------------------------------------------------------
 
-! C------------------------------------------------------------------------------
-!       REAL*8 FUNCTION PSEUDO(N,R,C,S_SET,TEMP,NBR,JJ)
-! C     THIS FUNCTION CALCULATES THE PSEUDOLIKELIHOOD FOR A GIVEN TEMP,
-! C     S_SET AND GRAPH DEFINED BY NBR AND JJ
-!       IMPLICIT NONE
-!       INTEGER N, R, C, i, k, m
-!       REAL*8 TEMP
-!       REAL*8 L
-!       REAL*8 sum
+C-----------------------------------------------------------------------
+      REAL*8 FUNCTION PSEUDO(N,R,C,D,TEMP,H,NBR,JJ)
+C     THIS FUNCTION CALCULATES THE PSEUDOLIKELIHOOD FOR A GIVEN TEMP, H,
+C     D AND GRAPH DEFINED BY NBR AND JJ
 
-!       INTEGER S_SET(1:C,1:R,1:N)
-!       TYPE(MULTI_ARRAY),ALLOCATABLE:: NBR(:)
-!       TYPE(MULTI_ARRAY),ALLOCATABLE:: JJ(:)
+      INTEGER N, R, C
+      INTEGER D(1:C,1:R,1:N)
+      REAL*8 TEMP, H
+      TYPE(MULTI_ARRAY),ALLOCATABLE:: NBR(:)
+      TYPE(MULTI_ARRAY),ALLOCATABLE:: JJ(:)
 
-!       PSEUDO = 0.0d0
-!       L = 0.0d0
-!       sum = 0.0d0
+      INTEGER a, i, m, k
+      REAL*8 L
+      REAL*8 SUM
+      REAL*8 K2
+      INTEGER PBC(0:R+1) !PBC IN THE TROTTER DIRECTION
 
-!       DO i = 1,N
-!       DO m = 1,C
-!             DO k = 1, SIZE(JJ(i)%V)
-!                   sum = sum + JJ(i)%V(k)*S_SET(m,NBR(i)%V(k))
-!             ENDDO
-            
-!             L = L + LOG(0.5d0*(1 + S_SET(m,i)*EXP(TEMP*sum)))
-!             sum = 0.0d0
-!       ENDDO
-!       PSEUDO = PSEUDO + L
-!       L = 0.0d0
-!       ENDDO
+      PBC(0)=R
+      DO i=1,R
+            PBC(i) = i
+      END DO
+      PBC(R+1) = 1
 
-!       RETURN
-!       END FUNCTION PSEUDO
-! C------------------------------------------------------------------------------
+      PSEUDO = 0.0d0
+      L = 0.0d0
+      SUM = 0.0d0
+
+      K2 = -(TEMP/2.)*LOG(TANH(H/(TEMP*R)))
+
+      DO a = 1,R
+      DO i = 1,N
+      DO m = 1,C
+      DO k = 1,SIZE(JJ(i)%v)
+            SUM = SUM + JJ(i)%V(k)*D(a,m,NBR(i)%V(k)) !COUPLING CONTRIBUTION
+      END DO !k neighbours
+      SUM = SUM + K2*D(a,m,i)*(D(PBC(a-1),m,i) + D(PBC(a+1),m,i)) !TRANSVERSE CONTRIBUTION
+      L = L + LOG(0.5d0*(1 + D(a,m,i)*TANH(SUM/TEMP)))
+      SUM = 0.0d0
+      END DO !m configurations
+      PSEUDO = PSEUDO + L/C
+      L = 0.0d0
+      END DO !i nodes
+      END DO !a Trotter slices
+
+      RETURN
+      END FUNCTION PSEUDO
+C-----------------------------------------------------------------------
 
       END MODULE MODEL

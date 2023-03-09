@@ -2,7 +2,7 @@ C     METROPOLIS SAMPLE GENERATOR
 C     0!
 C     Lluís Torres 
 C     TFM
-C     FORTRAN 77
+C     FORTRAN 95
 
       PROGRAM SAMPLE_GENERATOR
 
@@ -144,8 +144,8 @@ C***********************************************************************
 C     MONTE-CARLO SIMULATION
       DO IMC = 1,MCTOT
             DO IPAS = 1,N*R
-                  CALL METROPOLIS(S1,N,R,valid1,TEMP,H,DE1,NBR,JJ)
-                  CALL METROPOLIS(S2,N,R,valid2,TEMP,H,DE2,NBR,JJ)
+                  CALL METROPOLIS(N,R,S1,valid1,TEMP,H,DE1,NBR,JJ)
+                  CALL METROPOLIS(N,R,S2,valid2,TEMP,H,DE2,NBR,JJ)
                   IF (valid1) THEN
                         ENE1 = ENE1 + DE1
                   END IF

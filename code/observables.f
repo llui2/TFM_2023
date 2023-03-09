@@ -2,7 +2,7 @@ C     OBSERVABLES
 C     0!
 C     Lluís Torres 
 C     TFM
-C     FORTRAN 77
+C     FORTRAN 95
 
       PROGRAM OBSERVABLES
 
