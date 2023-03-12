@@ -103,14 +103,10 @@ C     FOR ALL TEMP VALUES
       WRITE(str,'(f4.2)') TEMP
       str1 = str(1:1)//str(3:4)
 
-      print*, 'kekw1'
-
 C***********************************************************************
       CALL SYSTEM('mkdir -p results/reconstruction/T'//str1//
      . '_Γ'//str2)
 C***********************************************************************
-
-      print*, 'kekw2'
 
 C     FOR ALL p VALUES
       DO Ip = 1,p_SIZE
@@ -122,8 +118,6 @@ C***********************************************************************
       OPEN(UNIT=10,FILE='results/reconstruction/T'//str1//'_Γ'//str2//
      .'/g_'//str3//'.dat')
 C***********************************************************************
-
-      print*, 'kekw3'
 
 C     FOR ALL SEEDS
       DO SEED = SEEDini,SEEDini+NSEEDS-1
