@@ -17,7 +17,7 @@ rm *.mod
 rm *.out
 # PLOT OBSERVABLE
 python3 plots/mz.py
-open results/fig*.pdf
+#open results/fig*.pdf
 # RECONSTRUCTION 
 gfortran -c -g r1279/r1279.f90 r1279/ran2.f classic/model.f classic/pseudolikelihood.f
 chmod +x pseudolikelihood.o model.o r1279.o ran2.o
@@ -36,4 +36,4 @@ rm *.mod
 rm *.out
 # PLOT PERFORMANCE
 python3 plots/g.py
-open results/plot*.pdf
+#open results/plot*.pdf

@@ -510,10 +510,10 @@ C     FIND LOCATION OF A VALUE IN AN ARRAY
       INTEGER r
       LOGICAL out
 
-      floc = 0
+      FLOC = 0
       DO r = 1, SIZE(array)
             IF (array(r).EQ.value) THEN
-                  floc = r
+                  FLOC = r
                   out = .TRUE.
             END IF
       END DO
@@ -531,6 +531,7 @@ C     IF ΔPL > 0 THEN THE CHANGE IS ACCPETED, ELSE IF ΔPL < 0 THEN THE
 C     CHANGE IS ACCEPTED WITH A PROBABILITY OF EXP(-ΔPL/k_BT'), WHERE
 C     T' IS THE FICTICIOUS TEMPERATURE
 
+      !IMPLICIT NONE
       INTEGER N, C
       INTEGER D(1:C,1:N)
       LOGICAL valid
@@ -550,7 +551,7 @@ C     T' IS THE FICTICIOUS TEMPERATURE
       EXTERNAL r1279
       INTEGER m
       REAL*8 SUM
-      INTEGER i1,i2,i3,i4
+      INTEGER i,i1,i2,i3,i4
       INTEGER ip,ip2
       INTEGER newLAMBDA(1:C,1:N)
       
@@ -582,36 +583,36 @@ C     RANDOM PAIRWISE COUPLING CHANGE
 C     CALCULATE newLAMBDA
       DO m = 1,C
 
-      ip = floc(NBR(i1)%v,i3)
-      ip2 = floc(newNBR(i1)%v,i3)
+      ip = FLOC(NBR(i1)%v,i3)
+      ip2 = FLOC(newNBR(i1)%v,i3)
       IF (ip.EQ.0) THEN
-      newLAMBDA(m,i1)=INT(newLAMBDA(m,i1)+newJJ(i1)%v(ip2)*D(m,i3))
+      newLAMBDA(m,i1)=(newLAMBDA(m,i1)+newJJ(i1)%v(ip2)*D(m,i3))
       ELSE IF (ip.NE.0) THEN
-      newLAMBDA(m,i1)=INT(newLAMBDA(m,i1)+2*newJJ(i1)%v(ip2)*D(m,i3))
+      newLAMBDA(m,i1)=(newLAMBDA(m,i1)+2*newJJ(i1)%v(ip2)*D(m,i3))
       END IF
 
-      ip = floc(NBR(i3)%v,i1)
-      ip2 = floc(newNBR(i3)%v,i1)
+      ip = FLOC(NBR(i3)%v,i1)
+      ip2 = FLOC(newNBR(i3)%v,i1)
       IF (ip.EQ.0) THEN
-      newLAMBDA(m,i3)=INT(newLAMBDA(m,i3)+newJJ(i3)%v(ip2)*D(m,i1))
+      newLAMBDA(m,i3)=(newLAMBDA(m,i3)+newJJ(i3)%v(ip2)*D(m,i1))
       ELSE IF (ip.NE.0) THEN
-      newLAMBDA(m,i3)=INT(newLAMBDA(m,i3)+2*newJJ(i3)%v(ip2)*D(m,i1))
+      newLAMBDA(m,i3)=(newLAMBDA(m,i3)+2*newJJ(i3)%v(ip2)*D(m,i1))
       END IF
 
-      ip = floc(NBR(i2)%v,i4)
-      ip2 = floc(newNBR(i2)%v,i4)
+      ip = FLOC(NBR(i2)%v,i4)
+      ip2 = FLOC(newNBR(i2)%v,i4)
       IF (ip2.EQ.0) THEN
-      newLAMBDA(m,i2)=INT(newLAMBDA(m,i2)-JJ(i2)%v(ip)*D(m,i4))
+      newLAMBDA(m,i2)=(newLAMBDA(m,i2)-JJ(i2)%v(ip)*D(m,i4))
       ELSE IF (ip2.NE.0) THEN
-      newLAMBDA(m,i2)=INT(newLAMBDA(m,i2)+2*newJJ(i2)%v(ip2)*D(m,i4))
+      newLAMBDA(m,i2)=(newLAMBDA(m,i2)+2*newJJ(i2)%v(ip2)*D(m,i4))
       END IF 
 
-      ip = floc(NBR(i4)%v,i2)
-      ip2 = floc(newNBR(i4)%v,i2)
+      ip = FLOC(NBR(i4)%v,i2)
+      ip2 = FLOC(newNBR(i4)%v,i2)
       IF (ip2.EQ.0) THEN
-      newLAMBDA(m,i4)=INT(newLAMBDA(m,i4)-JJ(i4)%v(ip)*D(m,i2))
+      newLAMBDA(m,i4)=(newLAMBDA(m,i4)-JJ(i4)%v(ip)*D(m,i2))
       ELSE IF (ip2.NE.0) THEN
-      newLAMBDA(m,i4)=INT(newLAMBDA(m,i4)+2*newJJ(i4)%v(ip2)*D(m,i2))
+      newLAMBDA(m,i4)=(newLAMBDA(m,i4)+2*newJJ(i4)%v(ip2)*D(m,i2))
       END IF 
       
       END DO      
@@ -749,7 +750,7 @@ C     SELECTING A NODE i3 THAT IS NOT A NEIGBOR  OF i1 ALREADY
       DO WHILE (valid2.EQV..FALSE.)
       i3 = MOD(INT(r1279()*N),N) + 1
 C     THIS ALLOW TO SEE IF I3 IS ALREADY A NEIGBOUR OF I1
-      ip = floc(NBR(i1)%v,i3)
+      ip = FLOC(NBR(i1)%v,i3)
 C     ip IS 0 IF i3 IS NOT IN NBR(i1)%v
       IF ((ip.EQ.0).AND.(i1.NE.i3).AND.(SIZE(NBR(i3)%v).LT.N-1)) THEN
             valid2 = .TRUE.
@@ -851,7 +852,7 @@ C     THIS FUNCTION CALCULATES THE GAMMA BETWEEN JJ AND JJ_0
       DO i = 1,N
             DO k = 1,SIZE(NBR_0(i)%v)
                   IF (i.LT.NBR_0(i)%v(k)) THEN
-                  ip = floc(NBR(i)%v,NBR_0(i)%v(k))
+                  ip = FLOC(NBR(i)%v,NBR_0(i)%v(k))
                   IF (ip.EQ.0) THEN
                         SUM = SUM + (JJ_0(i)%v(k))**2
                   END IF
@@ -866,7 +867,5 @@ C     THIS FUNCTION CALCULATES THE GAMMA BETWEEN JJ AND JJ_0
       RETURN
       END FUNCTION GAMMAA
 C-----------------------------------------------------------------------
-
-
 
       END MODULE MODEL

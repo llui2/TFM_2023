@@ -111,17 +111,15 @@ C     FOR ALL p VALUES
       str3 = str(1:1)//str(3:4)
 
 C***********************************************************************
-c      CALL SYSTEM('mkdir -p results/accuracy/T'//str1//'_Γ'//str2)
-c      OPEN(UNIT=10,FILE='results/accuracy/T'//str1//'_Γ'//str2//
-c     .'/g_'//str3//'.dat')
+      CALL SYSTEM('mkdir -p results/accuracy/T'//str1//'_Γ'//str2)
+      OPEN(UNIT=10,FILE='results/accuracy/T'//str1//'_Γ'//str2//
+     .'/g_'//str3//'.dat')
 C***********************************************************************
 
 C     FOR ALL SEEDS
       DO SEED = SEEDini,SEEDini+NSEEDS-1
       WRITE(str4,'(i3)') SEED
       CALL setr1279(SEED)
-
-      print*, 'k1'
 
 C***********************************************************************
 C     ORIGINAL RANDOM SYSTEM (GRAPH+COUPLINGS)
@@ -137,14 +135,10 @@ C     READ THE SAMPLE
             D(IC,:) = array
       END DO
       CLOSE(3)
-
-      print*, 'k2'
 C***********************************************************************
 C     INITIAL FICTICIOUS TEMPERATURE  
       TEMP_F = -LOG(0.5d0*(1+TANH(1.D0/TEMP)))/z
-      !TF_STEP = TEMP_F/TAU
-      !print*, TEMP_F, TF_STEP
-      print*, 'k3'
+      TF_STEP = TEMP_F/TAU
 C***********************************************************************
 C     INITIAL RANDOM SYSTEM (GRAPH+COUPLINGS)
       CALL setr1279(999)
@@ -161,15 +155,11 @@ C     MONTE-CARLO SIMULATION
             DO IPAS = 1,M
             CALL PSEUDOLIKELIHOOD(N,C,D,valid,TEMP_F,
      .                        DPL,NBR,INBR,JJ,zmax,funct,LAMBDA)
-            print*, 'k4'
             IF (valid) THEN
                   PL = PL + DPL
             END IF
-            print*, 'k5'
             END DO
-            !TEMP_F = TEMP_F - TEMP_F/TAU
-            print*, 'k6'
-            call exit(0)
+            TEMP_F = TEMP_F - TEMP_F/TAU
       ENDDO
 C***********************************************************************
       WRITE(10,*) SEED, GAMMAA(N,M,NBR,JJ,NBR_0,JJ_0)
