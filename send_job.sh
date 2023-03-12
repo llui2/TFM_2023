@@ -7,7 +7,7 @@ gfortran -c r1279/r1279.f90 r1279/ran2.f classic/model.f classic/observables.f
 chmod +x observables.o model.o r1279.o ran2.o
 gfortran observables.o model.o r1279.o ran2.o -o observables.out
 # RECONSTRUCTION 
-gfortran -c -fcheck=all r1279/r1279.f90 r1279/ran2.f classic/model.f classic/pseudolikelihood.f
+gfortran -c r1279/r1279.f90 r1279/ran2.f classic/model.f classic/pseudolikelihood.f
 chmod +x pseudolikelihood.o model.o r1279.o ran2.o
 gfortran pseudolikelihood.o model.o r1279.o ran2.o -o pseudolikelihood.out
 # PERFORMANCE 

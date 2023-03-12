@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Job name:
-#$ -N metropolis
+#$ -N pseudolikelihood
 
 # Output log file:
 #$ -o $JOB_NAME-$JOB_ID.log
@@ -18,18 +18,15 @@
 # Now comes the commands to be executed
 # Copy files to the local disk on the node
 cp input.txt $TMPDIR/
-cp metropolis.out $TMPDIR/
-cp observables.out $TMPDIR/
-#cp pseudolikelihood.out $TMPDIR/
-#cp performance.out $TMPDIR/
+cp -r results $TMPDIR/
+cp pseudolikelihood.out $TMPDIR/
+cp performance.out $TMPDIR/
 
 # Change to the execution directory
 cd $TMPDIR/
 # And run the exe
-./metropolis.out
-./observables.out
-#./pseudolikelihood.out
-#./performance.out
+./pseudolikelihood.out
+./performance.out
 # Finally, we copy back all important output to the working directory
 scp -r results nodo00:$SGE_O_WORKDIR/results #-$JOB_ID
 
