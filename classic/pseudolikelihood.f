@@ -166,10 +166,10 @@ C     MONTE-CARLO SIMULATION
                   PL = PL + DPL
             END IF
             print*, 'k5'
+            call exit(0)
             END DO
             TEMP_F = TEMP_F - TF_STEP
             print*, 'k6'
-            call exit(0)
       ENDDO
 C***********************************************************************
       WRITE(10,*) SEED, GAMMAA(N,M,NBR,JJ,NBR_0,JJ_0)
