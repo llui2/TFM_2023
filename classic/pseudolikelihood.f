@@ -154,6 +154,7 @@ C     INITIAL PSEUDOLIKELIHOOD
       PL = PSEUDO(N,C,D,TEMP,NBR,JJ)
 C***********************************************************************
 C     MONTE-CARLO SIMULATION
+      print*, 'kekw'
       DO IMC = 1,TAU
             DO IPAS = 1,M
             CALL PSEUDOLIKELIHOOD(N,C,D,valid,TEMP_F,

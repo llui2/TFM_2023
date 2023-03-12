@@ -28,10 +28,8 @@ cd $TMPDIR/
 # And run the exe
 ./metropolis.out
 ./observables.out
-pwd
-ls
 ./pseudolikelihood.out
-./performance.out
+#./performance.out
 # Finally, we copy back all important output to the working directory
 scp -r results nodo00:$SGE_O_WORKDIR/results-$JOB_ID
 
