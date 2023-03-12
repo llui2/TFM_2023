@@ -103,9 +103,6 @@ C     FOR ALL TEMP VALUES
       str1 = str(1:1)//str(3:4)
 
 C***********************************************************************
-      print*, 'results/accuracy/T'//str1//'_Γ'//str2
-      print*, '.|.'
-C***********************************************************************
 
 C     FOR ALL p VALUES
       DO Ip = 1,p_SIZE
@@ -114,9 +111,9 @@ C     FOR ALL p VALUES
       str3 = str(1:1)//str(3:4)
 
 C***********************************************************************
-      CALL SYSTEM('mkdir -p results/accuracy/T'//str1//'_Γ'//str2)
-      OPEN(UNIT=10,FILE='results/accuracy/T'//str1//'_Γ'//str2//
-     .'/g_'//str3//'.dat')
+c      CALL SYSTEM('mkdir -p results/accuracy/T'//str1//'_Γ'//str2)
+c      OPEN(UNIT=10,FILE='results/accuracy/T'//str1//'_Γ'//str2//
+c     .'/g_'//str3//'.dat')
 C***********************************************************************
 
 C     FOR ALL SEEDS
@@ -153,6 +150,7 @@ C***********************************************************************
 C     INITIAL PSEUDOLIKELIHOOD
       PL = PSEUDO(N,C,D,TEMP,NBR,JJ)
 C***********************************************************************
+      print*, pl
 C     MONTE-CARLO SIMULATION
       DO IMC = 1,TAU
             DO IPAS = 1,M
