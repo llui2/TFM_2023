@@ -156,8 +156,6 @@ C***********************************************************************
 C     INITIAL PSEUDOLIKELIHOOD
       PL = PSEUDO(N,C,D,TEMP,NBR,JJ)
 C***********************************************************************
-      print*, pl
-      call exit(0)
 C     MONTE-CARLO SIMULATION
       DO IMC = 1,TAU
             DO IPAS = 1,M
@@ -168,6 +166,8 @@ C     MONTE-CARLO SIMULATION
             END IF
             END DO
             TEMP_F = TEMP_F - TF_STEP
+            print*, 'k4'
+            call exit(0)
       ENDDO
 C***********************************************************************
       WRITE(10,*) SEED, GAMMAA(N,M,NBR,JJ,NBR_0,JJ_0)
