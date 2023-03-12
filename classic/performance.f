@@ -8,6 +8,7 @@ C     FORTRAN 95
 
       USE MODEL
 
+      IMPLICIT NONE
 C-----(SYSTEM)------------------------------------------------
 C     NODES, EDGES, CONNECTIVITY
       INTEGER N, M, z
@@ -28,7 +29,7 @@ C     RANDOM NUMBER GENERATOR
 C     PERFORMANCE ESTIMATOR
       REAL*8 gMEAN, gERROR, g
 C-----(DUMMY)-------------------------------------------------
-      INTEGER ITEMP, Ip
+      INTEGER ITEMP, Ip, iSEED
       CHARACTER(4) str
       CHARACTER(3) str1, str2, str3
       INTEGER zmax

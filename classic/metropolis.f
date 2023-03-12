@@ -8,6 +8,7 @@ C     FORTRAN 95
 
       USE MODEL
 
+      IMPLICIT NONE
 C-----(SYSTEM)------------------------------------------------
 C     NODES, EDGES, CONNECTIVITY
       INTEGER N, M, z
@@ -38,6 +39,7 @@ C     SEED NUMBER, INITIAL SEED NUMBER
       PARAMETER(SEEDini = 100)
 C     RANDOM NUMBER GENERATOR
       EXTERNAL r1279
+      REAL*8 r1279
 C     ESTIMATE TIME VARIABLES
       REAL*4 TIME1, TIME2, time
 C     SIMULATION VARIABLES
@@ -52,8 +54,8 @@ C     STORE SPIN CONFIGURATION AS N/zip_size INTEGERS
       INTEGER, ALLOCATABLE:: decimal1(:), decimal2(:)
       INTEGER, ALLOCATABLE:: array1(:), array2(:)
 C-----(DUMMY)-------------------------------------------------
-      INTEGER ITEMP, Ip 
-      INTEGER IMC
+      INTEGER ITEMP, Ip
+      INTEGER IMC, IPAS, i
       CHARACTER(4) str
       CHARACTER(3) str1, str2, str3, str4
 C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

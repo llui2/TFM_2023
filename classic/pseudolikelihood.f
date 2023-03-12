@@ -8,6 +8,7 @@ C     FORTRAN 95
 
       USE MODEL
 
+      IMPLICIT NONE
 C-----(SYSTEM)------------------------------------------------
 C     NODES, EDGES, CONNECTIVITY
       INTEGER N, M, z
@@ -36,8 +37,6 @@ C     NUMBER OF GRAPHS TO SIMULATE FOR EVERY P VALUE
 C     SEED NUMBER, INITIAL SEED NUMBER
       INTEGER SEED, SEEDini
       PARAMETER(SEEDini = 100)
-C     RANDOM NUMBER GENERATOR
-      EXTERNAL r1279
 C     ESTIMATE TIME VARIABLES
       REAL*4 TIME1, TIME2, time
 C     SIMULATION VARIABLES
@@ -56,7 +55,7 @@ C     STORE SPIN CONFIGURATION AS N/zip_size INTEGERS
       INTEGER, ALLOCATABLE:: array(:)
 C-----(DUMMY)-------------------------------------------------
       INTEGER ITEMP, Ip, IC
-      INTEGER IMC
+      INTEGER IMC, IPAS, i
       CHARACTER(4) str
       CHARACTER(3) str1, str2, str3, str4
       INTEGER, ALLOCATABLE:: LAMBDA(:,:)

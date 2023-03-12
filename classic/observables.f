@@ -8,6 +8,7 @@ C     FORTRAN 95
 
       USE MODEL
 
+      IMPLICIT NONE
 C-----(SYSTEM)------------------------------------------------
 C     NODES, EDGES, CONNECTIVITY
       INTEGER N, M, z
@@ -48,7 +49,7 @@ C-----(OBSERVABLES)-------------------------------------------
 C     MAGNETIZATION (Z COMPONENT)
       REAL*8 MZ
 C-----(DUMMY)-------------------------------------------------
-      INTEGER ITEMP, Ip, IC
+      INTEGER ITEMP, Ip, IC, i
       CHARACTER(4) str
       CHARACTER(3) str1, str2, str3, str4
 C~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
