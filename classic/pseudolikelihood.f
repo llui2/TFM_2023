@@ -167,7 +167,7 @@ C     MONTE-CARLO SIMULATION
             END IF
             print*, 'k5'
             END DO
-            TEMP_F = TEMP_F - TEMP_F/TAU
+            !TEMP_F = TEMP_F - TEMP_F/TAU
             print*, 'k6'
             call exit(0)
       ENDDO
