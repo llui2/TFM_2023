@@ -121,6 +121,8 @@ C     FOR ALL SEEDS
       WRITE(str4,'(i3)') SEED
       CALL setr1279(SEED)
 
+      print*, 'k1'
+
 C***********************************************************************
 C     ORIGINAL RANDOM SYSTEM (GRAPH+COUPLINGS)
       CALL IRS(N,M,p,NBR_0,INBR_0,JJ_0)
@@ -135,10 +137,14 @@ C     READ THE SAMPLE
             D(IC,:) = array
       END DO
       CLOSE(3)
+
+      print*, 'k2'
 C***********************************************************************
 C     INITIAL FICTICIOUS TEMPERATURE  
       TEMP_F = -LOG(0.5d0*(1+TANH(1.D0/TEMP)))/z
       TF_STEP = TEMP_F/TAU
+
+      print*, 'k3'
 C***********************************************************************
 C     INITIAL RANDOM SYSTEM (GRAPH+COUPLINGS)
       CALL setr1279(999)
@@ -151,6 +157,7 @@ C     INITIAL PSEUDOLIKELIHOOD
       PL = PSEUDO(N,C,D,TEMP,NBR,JJ)
 C***********************************************************************
       print*, pl
+      call exit(0)
 C     MONTE-CARLO SIMULATION
       DO IMC = 1,TAU
             DO IPAS = 1,M
