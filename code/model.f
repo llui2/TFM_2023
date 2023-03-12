@@ -5,7 +5,7 @@ C     TFG
 C     FORTRAN 95
 
       MODULE MODEL 
-C     QUANTUM SPIN SYSTEM ON A RANDOM ERDÖS-RÉNYI GRAPH WITH RANDOM COUPLINGS
+C     VIANA-BRAY SPIN-GLASS MODEL WITH DISCRETE DISTRIBUTION OF THE COUPLING IN A TRANSVERSE FIELD
 
 C     MULTI ARRAY TYPE
       TYPE :: MULTI_ARRAY
@@ -356,7 +356,7 @@ C     THIS SUBRUTINE CONVERTS A BINARY NUMBER TO N/zip_size DECIMAL NUMBERS
             decimal(j) = 0
             scale = (j-1)*zip_size
             DO i = 1,zip_size
-                  IF (binary(i).EQ.1) THEN
+                  IF (binary(scale+i).EQ.1) THEN
                         decimal(j) = decimal(j) + 2**(zip_size-i)
                   END IF
             END DO
