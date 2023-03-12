@@ -142,8 +142,8 @@ C     READ THE SAMPLE
 C***********************************************************************
 C     INITIAL FICTICIOUS TEMPERATURE  
       TEMP_F = -LOG(0.5d0*(1+TANH(1.D0/TEMP)))/z
-      TF_STEP = TEMP_F/TAU
-
+      !TF_STEP = TEMP_F/TAU
+      !print*, TEMP_F, TF_STEP
       print*, 'k3'
 C***********************************************************************
 C     INITIAL RANDOM SYSTEM (GRAPH+COUPLINGS)
@@ -168,7 +168,7 @@ C     MONTE-CARLO SIMULATION
             print*, 'k5'
             call exit(0)
             END DO
-            TEMP_F = TEMP_F - TF_STEP
+            TEMP_F = TEMP_F - TEMP_F/TAU
             print*, 'k6'
       ENDDO
 C***********************************************************************
