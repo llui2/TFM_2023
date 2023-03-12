@@ -107,6 +107,7 @@ C***********************************************************************
       print*, 'results/reconstruction/T'//str1//'_Γ'//str2
       CALL SYSTEM('mkdir -p results/reconstruction/T'//str1//
      . '_Γ'//str2)
+      print*, '.|.'
 C***********************************************************************
 
 C     FOR ALL p VALUES
