@@ -19,7 +19,7 @@ rm *.out
 python3 plots/mz.py
 open results/fig*.pdf
 # RECONSTRUCTION 
-gfortran -c r1279/r1279.f90 r1279/ran2.f classic/model.f classic/pseudolikelihood.f
+gfortran -c -g r1279/r1279.f90 r1279/ran2.f classic/model.f classic/pseudolikelihood.f
 chmod +x pseudolikelihood.o model.o r1279.o ran2.o
 gfortran pseudolikelihood.o model.o r1279.o ran2.o -o pseudolikelihood.out
 rm *.o

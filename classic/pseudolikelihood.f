@@ -104,8 +104,6 @@ C     FOR ALL TEMP VALUES
 
 C***********************************************************************
       print*, 'results/reconstruction/T'//str1//'_Γ'//str2
-      CALL SYSTEM('mkdir -p results/reconstruction/T'//str1//
-     . '_Γ'//str2)
       print*, '.|.'
 C***********************************************************************
 
@@ -115,9 +113,9 @@ C     FOR ALL p VALUES
       WRITE(str,'(f4.2)') p
       str3 = str(1:1)//str(3:4)
 
-      print*, str3
-
 C***********************************************************************
+      CALL SYSTEM('mkdir -p results/reconstruction/T'//str1//
+     . '_Γ'//str2)
       OPEN(UNIT=10,FILE='results/reconstruction/T'//str1//'_Γ'//str2//
      .'/g_'//str3//'.dat')
 C***********************************************************************
@@ -126,8 +124,6 @@ C     FOR ALL SEEDS
       DO SEED = SEEDini,SEEDini+NSEEDS-1
       WRITE(str4,'(i3)') SEED
       CALL setr1279(SEED)
-
-      print*, str4
 
 C***********************************************************************
 C     ORIGINAL RANDOM SYSTEM (GRAPH+COUPLINGS)
