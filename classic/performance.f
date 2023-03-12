@@ -82,7 +82,7 @@ C     FOR ALL p VALUES
 C***********************************************************************
 C     GAMMA MEAN
       gMEAN = 0.d0
-      OPEN(UNIT=2,FILE='results/reconstruction/T'//str1//'_Γ'//str2//
+      OPEN(UNIT=2,FILE='results/accuracy/T'//str1//'_Γ'//str2//
      .'/g_'//str3//'.dat')
       DO ISEED = 1,NSEEDS
             READ(2,*) SEED, g
@@ -95,7 +95,7 @@ C***********************************************************************
 C***********************************************************************
 C     GAMMA ERROR
       gERROR = 0.d0
-      OPEN(UNIT=2,FILE='results/reconstruction/T'//str1//'_Γ'//str2//
+      OPEN(UNIT=2,FILE='results/accuracy/T'//str1//'_Γ'//str2//
      .'/g_'//str3//'.dat')
       DO ISEED = 1,NSEEDS
             READ(2,*) SEED, g
