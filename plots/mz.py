@@ -5,7 +5,7 @@ plt.rc('font', family='Times')
 plt.rc('mathtext', fontset='cm')
 
 # Read data from file
-data = np.loadtxt('results/data/MZ.dat')
+data = np.loadtxt('results/data/mz.dat')
 
 # Set up arrays
 TEMP = data[:, 0]

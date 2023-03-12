@@ -87,9 +87,9 @@ C     ALLOCATION
       ALLOCATE(S(1:N))
 C***********************************************************************
       CALL SYSTEM('mkdir -p results/data/')
-      OPEN(UNIT=1,FILE='results/data/MZ.dat')
+      OPEN(UNIT=1,FILE='results/data/mz.dat')
 300   FORMAT(A,4X,A,7X,A,7X,A)
-      WRITE(1,300) '#TEMP', 'H', 'p', '<|MZ|>'
+      WRITE(1,300) '#TEMP', 'H', 'p', '<|mz|>'
 C***********************************************************************
 
 C     FOR ALL TEMP VALUES

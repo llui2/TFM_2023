@@ -28,6 +28,7 @@ cd $TMPDIR/
 # And run the exe
 ./metropolis.out
 ./observables.out
+pwd
 ./pseudolikelihood.out
 ./performance.out
 # Finally, we copy back all important output to the working directory
