@@ -162,12 +162,14 @@ C     MONTE-CARLO SIMULATION
             CALL PSEUDOLIKELIHOOD(N,C,D,valid,TEMP_F,
      .                        DPL,NBR,INBR,JJ,zmax,funct,LAMBDA)
             print*, 'k4'
-            call exit(0)
             IF (valid) THEN
                   PL = PL + DPL
             END IF
+            print*, 'k5'
             END DO
             TEMP_F = TEMP_F - TF_STEP
+            print*, 'k6'
+            call exit(0)
       ENDDO
 C***********************************************************************
       WRITE(10,*) SEED, GAMMAA(N,M,NBR,JJ,NBR_0,JJ_0)
