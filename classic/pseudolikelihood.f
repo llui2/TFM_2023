@@ -114,8 +114,8 @@ C     FOR ALL p VALUES
       str3 = str(1:1)//str(3:4)
 
 C***********************************************************************
-      CALL SYSTEM('mkdir -p results/reconstruction/T'//str1//
-     . '_Γ'//str2)
+c      CALL SYSTEM('mkdir -p results/reconstruction/T'//str1//
+c     . '_Γ'//str2)
       OPEN(UNIT=10,FILE='results/reconstruction/T'//str1//'_Γ'//str2//
      .'/g_'//str3//'.dat')
 C***********************************************************************
