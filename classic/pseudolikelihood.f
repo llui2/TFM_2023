@@ -95,7 +95,6 @@ C     THERE IS NO TRANSVERSE FIELD
       H = 0.00
       WRITE(str,'(f4.2)') H
       str2 = str(1:1)//str(3:4)
-      print*, str2
 C***********************************************************************
 
 C     FOR ALL TEMP VALUES
@@ -104,9 +103,8 @@ C     FOR ALL TEMP VALUES
       WRITE(str,'(f4.2)') TEMP
       str1 = str(1:1)//str(3:4)
 
-      print*, str1
-
 C***********************************************************************
+      print*, 'results/reconstruction/T'//str1//'_Γ'//str2
       CALL SYSTEM('mkdir -p results/reconstruction/T'//str1//
      . '_Γ'//str2)
 C***********************************************************************

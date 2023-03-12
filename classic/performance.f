@@ -72,11 +72,6 @@ C     FOR ALL TEMP VALUES
       WRITE(str,'(f4.2)') TEMP
       str1 = str(1:1)//str(3:4)
 
-C***********************************************************************
-      CALL SYSTEM('mkdir -p results/reconstruction/T'//str1//
-     . '_Γ'//str2)
-C***********************************************************************
-
 C     FOR ALL p VALUES
       DO Ip = 1,p_SIZE
       p = p_LIST(IP)
