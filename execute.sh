@@ -19,21 +19,21 @@ rm *.out
 python3 plots/mz.py
 open results/fig*.pdf
 # RECONSTRUCTION 
-gfortran -c r1279/r1279.f90 r1279/ran2.f classic/model.f classic/pseudolikelihood.f
-chmod +x pseudolikelihood.o model.o r1279.o ran2.o
-gfortran pseudolikelihood.o model.o r1279.o ran2.o -o pseudolikelihood.out
-rm *.o
-rm *.mod
-./pseudolikelihood.out
-rm *.out
-# PERFORMANCE 
-gfortran -c r1279/r1279.f90 r1279/ran2.f classic/model.f classic/performance.f
-chmod +x performance.o model.o r1279.o ran2.o
-gfortran performance.o model.o r1279.o ran2.o -o performance.out
-rm *.o
-rm *.mod
-./performance.out
-rm *.out
-# PLOT PERFORMANCE
-python3 plots/g.py
-open results/plot*.pdf
+# gfortran -c r1279/r1279.f90 r1279/ran2.f classic/model.f classic/pseudolikelihood.f
+# chmod +x pseudolikelihood.o model.o r1279.o ran2.o
+# gfortran pseudolikelihood.o model.o r1279.o ran2.o -o pseudolikelihood.out
+# rm *.o
+# rm *.mod
+# ./pseudolikelihood.out
+# rm *.out
+# # PERFORMANCE 
+# gfortran -c r1279/r1279.f90 r1279/ran2.f classic/model.f classic/performance.f
+# chmod +x performance.o model.o r1279.o ran2.o
+# gfortran performance.o model.o r1279.o ran2.o -o performance.out
+# rm *.o
+# rm *.mod
+# ./performance.out
+# rm *.out
+# # PLOT PERFORMANCE
+# python3 plots/g.py
+# open results/plot*.pdf
