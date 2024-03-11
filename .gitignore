@@ -1,0 +1,13 @@
+.DS_Store
+results
+cmd.txt
+git.txt
+*.mod
+*.out
+*.o
+results-*
+results*
+error-*
+output-*
+*.zip
+TODO.txt
